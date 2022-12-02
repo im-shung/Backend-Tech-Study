@@ -116,11 +116,12 @@ Statement는 DDL(CREATE, ALTER, DROP) 구문을 처리할 때 적합하다.
 Prepared Statement는 DML(SELECT, INSERT, UPDATE, DELETE)구문 처리에 적합하다.
 그리고 캐시에 저장된 Query를 활용하기 때문에 실행이 빠르며 SQL Injection을 막기 위한 방법으로 활용된다.
 
-```
+<hr>
+
 출처
-https://www.baeldung.com/java-statement-preparedstatement
-https://velog.io/@seaworld0125/SQL-injection-%EB%8C%80%EC%9D%91%EB%B0%A9%EB%B2%95-Prepared-Statement
-```
+- [Difference Between Statement and PreparedStatement](https://www.baeldung.com/java-statement-preparedstatement)
+- [SQL injection 대응 : Prepared Statement](https://velog.io/@seaworld0125/SQL-injection-%EB%8C%80%EC%9D%91%EB%B0%A9%EB%B2%95-Prepared-Statement)
+  
 <hr>
 
 # Database에서 slow query가 발생했을 경우 어떻게 대처하는지?
@@ -163,13 +164,13 @@ PostgreSQL의 경우 postgresql.conf에 auto_explain 라이브러리를 추가�
 
 이 방식을 사용하면, 빨리 실행되지만 부하를 일으키는 쿼리를 파악하기 좋단 장점이 있다. 
 
+<hr>
 
-```
 출처
-https://americanopeople.tistory.com/288
-https://velog.io/@breadkingdom/MySQL-%EC%84%B1%EB%8A%A5-%EA%B0%9C%EC%84%A0%EC%9D%84-%EC%9C%84%ED%95%9C-%ED%94%84%EB%A1%9C%ED%8C%8C%EC%9D%BC%EB%A7%81-1
-https://brufen97.tistory.com/5
-```
+- [PostgreSQL 슬로우쿼리를 잡아내는 3가지 방법](https://americanopeople.tistory.com/288)
+- [MySQL 성능 개선을 위한 프로파일링 1편: 슬로우 쿼리 로그](https://velogio@breadkingdomMySQL-%EC%84%B1%EB%8A%A5-%EA%B0%9C%EC%84%A0%EC%9D%84-%EC%9C%84%ED%95%9C-%ED%94%84%EB%A1%9C%ED%8C%8C%EC%9D%BC%EB%A7%81-1)
+- [PostgreSQL Slow Query 검출](https://brufen97.tistory.com/5)
+
 <hr>
 
 # Redo와 Undo
@@ -228,9 +229,8 @@ Checkpoint 이벤트가 발생하기 전에 장애가 발생한다면 Buffer Poo
 5. Log Switch가 발생하게 되면 Checkpoint 발생. 이 때 Checkpoint 프로세스가 DBWR 프로세스에게 Checkpoint 신호를 전달하면서 DBWR은 DB Cache 블록을 Data File로 저장한다.
 6. Checkpoint가 DBWR에게 Checkpoint 신호를 전달하면서 Checkpoint SCN, 꽉 찬 로그파일 안의 제일 마지막 번호를 알려준다. 그 번호는 Data File과 Control File에 저장된다.
 
-```
-LGWR 자세히 https://1duffy.tistory.com/24
-```
+LGWR 자세히 
+: [4장. 로그 기록자 백그라운드 프로세스(Log Writer, LGWR)](https://1duffy.tistory.com/24)
 
 <hr>
 
@@ -250,8 +250,10 @@ Redo Log가 트랜잭션 Commit과 CheckPoint 시 디스크에 기록되지만, 
 
 <strong>데이터를 수정함과 동시에 Rollback을 대비하기 위해, 업데이트 전의 데이터를 Undo Records로 기록하는 것이다. </strong>
 
-```
+<hr>
+
 출처
-https://velog.io/@pk3669/Mysql-Redo-Undo-Log
-https://victorydntmd.tistory.com/130
-```
+- [Mysql Redo / Undo Log](https://velog.io/@pk3669/Mysql-Redo-Undo-Log)
+- [🙈[DB이론] 신뢰성과 회복(Recovery)🐵](https://victorydntmd.tistory.com/130)
+
+<hr>
