@@ -188,12 +188,12 @@ DB 장애 시 Buffer Pool에 저장되어 있던 데이터의 유실을 방지(�
 ### InnoDB Buffer Pool?
 Buffer Pool은 InnoDB 엔진이 Table Caching 및 Index Data Caching을 위해 이용하는 메모리 공간이다. 
 다시 말해, Buffer Pool의 크기가 클수록 상대적으로 캐싱되는 데이터의 양이 늘어나기 때문에 Disk에 접근하는 횟수가 줄어들고, 이것은 DB의 성능 향상으로 이어진다.
-하지만, Buffer Pool은 메모리 공간이기 때문에 데이터베이스 장애 시 Buffer Pool에 있는 내용은 휘발된다. 이것은 ACID를 보장할수 없게 되고, 다시 해석하면 장애를 복구하더라도 데이터는 복구될 수 없다는 것을 의미한다. 
+하지만, Buffer Pool은 메모리 공간이기 때문에 <strong>데이터베이스 장애 시 Buffer Pool에 있는 내용은 휘발된다. </strong> 이것은 ACID를 보장할수 없게 되고, 다시 해석하면 장애를 복구하더라도 데이터는 복구될 수 없다는 것을 의미한다. 
 
 실제 DB에서 Commit이 발생하면 바로 디스크 영역(Table Space)으로 들어가는 것이 아닌 메모리 영역(Buffer Poll & Log Buffer)에 들어가는 것을 확인할 수 있다. (DISK I/O 절약)
 
 ### Redo Log
-Redo를 하기 위해서는 정상적으로 실행 되기까지의 과정을 기록해야 하는데, 이를 Redo Log 라고 한다. DML(SELECT 제외), DDL, TCL 등 데이터 변경이 일어나는 모든 것을 Redo Log 에 기록한다.
+Redo를 하기 위해서는 정상적으로 실행 되기까지의 과정을 기록해야 하는데, 이를 <strong>Redo Log</strong> 라고 한다. DML(SELECT 제외), DDL, TCL 등 데이터 변경이 일어나는 모든 것을 Redo Log 에 기록한다.
 
 - DML (Data Manipulation Language)
   - SELECT, INSERT, UPDATE, DELETE
@@ -205,7 +205,7 @@ Redo를 하기 위해서는 정상적으로 실행 되기까지의 과정을 기
   - COMMIT, ROLLBACK
 
 ### Redo Log File
-Log Buffer는 메모리 영역이기에 용량이 제한적이다. 용량이 제한적이기 때문에 Checkpoint 이벤트 발생시점에 Redo Log Buffer에 있던 데이터들을 Disk에 File로 저장하게 됩니다. 
+Log Buffer는 메모리 영역이기에 용량이 제한적이다. 용량이 제한적이기 때문에 Checkpoint 이벤트 발생시점에 Redo Log Buffer에 있던 데이터들을 Disk에 File로 저장하게 된다. 이 파일을 <strong>Redo Log File</strong> 라고 한다.
 ```
 Checkpoint란 메모리상의 수정된 데이터 블럭과 디스크의 데이터 파일을 동기화시키는 데이터베이스 이벤트
 
@@ -220,10 +220,22 @@ Checkpoint 이벤트가 발생하기 전에 장애가 발생한다면 Buffer Poo
 마지막 Checkpoint가 수행된 시점까지의 데이터가 Redo Log File로 남아있기 때문에 이 파일을 사용하여 데이터를 복구할 수 있다. 
 ```
 
+### 과정
+1. 실제 데이터 변경 전에 Redo Log Buffer에 데이터 변경에 대한 내용을 먼저 저장한다. (선 로그 기법: Log Ahead)
+2. DB Cache에도 데이터 변경에 대한 내용을 기록한다.
+3. LGWR 백그라운드 프로세스에 의해 Redo Log Buffer에 있는 내용을 Redo Log File에 저장한다.
+4. Commit이 발생하게 되면 Control File에 트랜잭션의 고유한 번호(SCN)를 기록한다.
+5. Log Switch가 발생하게 되면 Checkpoint 발생. 이 때 Checkpoint 프로세스가 DBWR 프로세스에게 Checkpoint 신호를 전달하면서 DBWR은 DB Cache 블록을 Data File로 저장한다.
+6. Checkpoint가 DBWR에게 Checkpoint 신호를 전달하면서 Checkpoint SCN, 꽉 찬 로그파일 안의 제일 마지막 번호를 알려준다. 그 번호는 Data File과 Control File에 저장된다.
+
+```
+LGWR 자세히 https://1duffy.tistory.com/24
+```
+
 <hr>
 
 ## Undo
-실행 취소 로그 레코드의 집합으로 트랜잭션 실행 후 Rollback 시 Undo Log를 참조해 이전 데이터로 복구할 수 있도록 로깅 해놓은 영역이다.
+실행 취소 로그 레코드의 집합으로 트랜잭션 실행 후 <strong>Rollback</strong> 시 <strong>Undo Log를 참조해 이전 데이터로 복구</strong>할 수 있도록 로깅 해놓은 영역이다.
 
 ### Undo Log가 필요한 이유 
 작업 수행 중에 수정된 페이지들이 버퍼 관리자의 버퍼 교체 알고리즘에 따라서 디스크에 출력될 수 있다.
@@ -236,8 +248,10 @@ Undo Log도 Redo Log와 마찬가지로 Log Buffer에 기록된다. Undo Records
 
 Redo Log가 트랜잭션 Commit과 CheckPoint 시 디스크에 기록되지만, Undo Log는 CheckPoint 시 디스크에 기록된다.
 
-데이터를 수정함과 동시에 Rollback을 대비하기 위해, 업데이트 전의 데이터를 Undo Records로 기록하는 것이다. 
+<strong>데이터를 수정함과 동시에 Rollback을 대비하기 위해, 업데이트 전의 데이터를 Undo Records로 기록하는 것이다. </strong>
 
 ```
-출처: https://velog.io/@pk3669/Mysql-Redo-Undo-Log
+출처
+https://velog.io/@pk3669/Mysql-Redo-Undo-Log
+https://victorydntmd.tistory.com/130
 ```
