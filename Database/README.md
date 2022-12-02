@@ -125,3 +125,51 @@ Prepared Statement는 DML(SELECT, INSERT, UPDATE, DELETE)구문 처리에 적합
 https://www.baeldung.com/java-statement-preparedstatement
 https://velog.io/@seaworld0125/SQL-injection-%EB%8C%80%EC%9D%91%EB%B0%A9%EB%B2%95-Prepared-Statement
 ```
+<hr>
+
+## Database에서 slow query가 발생했을 경우 어떻게 대처하는지?
+### slow query란
+DBMS에서 Client로 요청받은 query를 실행할 때 일정 시간 이상 수행되지 못한 query
+
+slow query를 잡아내는 3가지 방법
+- slow query 로그 남기기
+- 쿼리 실행계획 로그에 남기기
+- 쿼리 실행 통계 보기
+
+PostgreSQL의 경우로 설명
+### 1. slow query 로그 남기기
+```
+slow query 로그는 에러가 발생한 쿼리는 기록하지 않는다. 
+general 로그에서는 에러가 발생한 쿼리를 포함해서 모든 쿼리를 기록하므로 두 개의 로그를 모두 활성화하면 프로파일링에 도움이 된다.
+```
+postgresql.conf에 `log_min_duration_statement = 1000` 를 설정한다. 
+- 밀리세컨드 단위로 설정
+- 설정값보다 오래 걸리는 쿼리를 로그 파일에 기록
+- 0으로 설정하면 모든 로그 기록
+- 수정 후 reload 하여 적용 (restart 필요 없음)
+
+부하를 유발하는 단일 쿼리를 파악하기 쉽다. 그러나 처리 시간은 빠르지만, 여러번 호출되서 부하를 발생시키는 쿼리 실행을 인지하기는 어렵다는 단점이 있다. 
+
+
+### 2. 쿼리 실행계획 로그에 남기기
+PostgreSQL의 경우 postgresql.conf에 auto_explain 라이브러리를 추가한다. 
+`session_preload_libraries = 'auto_explain';`
+
+실행계획을 로그에 남기면, 당시의 쿼리 실행 계획을 볼 수 있단 장점이 있다.
+
+롱쿼리가 발생한 이후 데이터가 더 쌓이거나 삭제되면, 문제가 된 순간의 실행계획을 알 수 없다. 때문에 이를 확인할 수 있단 장점이 있다. 그런데 EXPLAIN ANALYZE 명령문을 기반으로 로그를 남기기 때문에, 롱쿼리를 다시 실행시킨단 리스크가 있다. 
+
+그리고 단일 롱쿼리만 파악할 수 있기 때문에, 짧지만 여러번 호출되서 문제를 일으키는 쿼리를 알 수 없는 단점이 있다.
+
+
+### 3. 쿼리 실행 통계 보기
+쿼리 실행 통계 라이브러리는 shared memory를 사용하기 때문에, 해당 모듈을 추가 / 삭제할 때는 항상 서버를 restart해줘야한다. `shared_preload_libraries = 'pg_stat_statements'`
+
+이 방식을 사용하면, 빨리 실행되지만 부하를 일으키는 쿼리를 파악하기 좋단 장점이 있다. 
+
+
+```
+출처: https://americanopeople.tistory.com/288
+https://velog.io/@breadkingdom/MySQL-%EC%84%B1%EB%8A%A5-%EA%B0%9C%EC%84%A0%EC%9D%84-%EC%9C%84%ED%95%9C-%ED%94%84%EB%A1%9C%ED%8C%8C%EC%9D%BC%EB%A7%81-1
+https://brufen97.tistory.com/5
+```
