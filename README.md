@@ -10,3 +10,5 @@
 -  [인터럽트](https://github.com/im-shung/Backend-Tech-Study/blob/main/OS/README.md#인터럽트)
 -  [캐시의 지역성](https://github.com/im-shung/Backend-Tech-Study/blob/main/OS/README.md#캐시의-지역성locality)
 -  [뮤텍스와 세마포어 차이](https://github.com/im-shung/Backend-Tech-Study/blob/main/OS/README.md#뮤텍스와-세마포어-차이)
+-  [동기(Sync)와 비동기(Async) 차이](https://github.com/im-shung/Backend-Tech-Study/blob/main/OS/README.md#동기sync와-비동기async-차이)
+
