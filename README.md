@@ -14,4 +14,6 @@
 -  [캐시의 지역성](https://github.com/im-shung/Backend-Tech-Study/blob/main/OS/README.md#캐시의-지역성locality)
 -  [뮤텍스와 세마포어 차이](https://github.com/im-shung/Backend-Tech-Study/blob/main/OS/README.md#뮤텍스와-세마포어-차이)
 -  [동기(Sync)와 비동기(Async) 차이](https://github.com/im-shung/Backend-Tech-Study/blob/main/OS/README.md#동기sync와-비동기async-차이)
-
+-  [멀티 스레드 프로그래밍](https://github.com/im-shung/Backend-Tech-Study/blob/main/OS/README.md#멀티-스레드-프로그래밍)
+-  [메모리 단편화 해결](https://github.com/im-shung/Backend-Tech-Study/blob/main/OS/README.md#메모리-단편화-해결)
+-  [가상 메모리(요구페이징, 페이지폴트)](https://github.com/im-shung/Backend-Tech-Study/blob/main/OS/README.md#가상-메모리)
