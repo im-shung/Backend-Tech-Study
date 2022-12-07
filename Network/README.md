@@ -222,3 +222,25 @@ Socket.IO는 Websocket을 사용하지만, 각 패킷에 추가적인 메타데�
 - [IPv4와 IPv6의 비교](https://www.ibm.com/docs/ko/i/7.3?topic=6-comparison-ipv4-ipv6)
 
 <hr>
+
+# Mac Address
+## Mac Address란
+- Mac 주소는 지정된 네트워크의 각 장치를 고유하게 식별하는 물리적 주소이다. 두 개의 네트워크 장치 간에 통신하려면 IP 주소와 MAC 주소 두 개가 필요하다. 인터넷에 연결할 수 있는 각 장치의 NIC(Network Interface card)에 할당된다.
+- Media Access Control의 약자로 물리적 주소, 하드웨어 주소, BIA(Burned In Address)라고도 한다.
+- 글로벌적으로 고유하다. 00 : 0a : 95 : 9d : 67 : 16과 같이 각 장치의 16 진수 형식으로 표시된다.
+- 길이는 12. 48비트(6바이트). 이 중 처음 24비트는 OUI(Organization Unique Identifier)에 사용되며 24비트는 NIC/벤더별로 사용된다.
+- OSI 7모델 중 데이터 링크 계층에서 작동한다.
+- 제조 시 장비 공급업체에서 제공하며 NIC에 내장되어 변경할 수 없다.
+- ARP 프로토콜은 논리 주소를 MAC 주소(물리적 주소)와 연결하는데 사용된다.
+
+## Mac Address vs IP Address
+- MAC는 Media Access Control, IP는 Internet Protocol
+- MAC 주소는 제조업체에서 제공하는 고유 주소, IP 주소는 ISP(Internet Service Provider)에서 제공하는 논리적 주소
+- MAC 주소는 네트워크 내에서 디바이스를 식별하는 데 사용되는 디바이스 NIC의 물리적 주소, IP 주소는 인터넷에서 네트워크나 디바이스를 식별하는 논리적 주소
+- MAC 주소는 데이터 링크 계층에서 작동하고, IP 주소는 네트워크 계층에서 작동한다.
+- MAC 주소는 6 바이트 16진수 주소, IPv4의 경우 4바이트, IPv6의 경우 8바이트다.
+  
+<hr>
+
+출처
+- [What is MAC Address?](https://www.javatpoint.com/what-is-mac-address)
