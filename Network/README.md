@@ -153,3 +153,72 @@ Definition:
 - [All About Sockets](https://docs.oracle.com/javase/tutorial/networking/sockets/index.html)
 
 <hr>
+
+# WebSocket vs Socket.io
+## WebSocket
+### 배경 - HTTP의 한계
+초기 웹의 목적은 단순한 문서전달이었다. HTTP는 요청한대로 응답을 보내주기만 하는 단순한 프로토콜이다. 하지만 인터넷이 발전하면서 게임, 채팅 등 요청-응답 이상의 실시간 통신이 필요했다. HTTP 프로토콜은 매 요청과 응답마다 연결을 수립하고 끊는 과정을 반복해야 했기 때문에 유사한 통신을 계속 반복해야 한다는 비효율성 문제가 있었다. 
+
+### 웹소켓의 탄생
+HTTP를 이용한 실시간 통신의 문제를 해결하기 위해 HTML5부터 웹소켓이 등장했다. 웹소켓은 실시간 양방향 통신을 지원하며 한 번 연결이 수립되면 클라이언트와 서버 모두 자유롭게 데이터를 보낼 수 있다. 
+
+### 웹소켓 프로토콜
+웹소켓은 HTTP와 같은 OSI 모델의 7계층에 위치하는 프로토콜이며, 4계층의 TCP에 의존한다.
+
+HTTP 프로토콜을 이용할 때 "http"를 이용하는 것처럼, 웹소켓을 이용할 때 "ws"를 이용한다. 또한 보완을 강화한 "https"를 사용하는 것처럼, "ws"에 비해 보완을 강화한 "wss"를 사용할 수 있다. 
+
+HTTP 프로토콜을 이용해서 연결을 수립하며 연결된 이후에도 연결을 할 때 사용했던 80 포트와 443 포트를 이용한다. 연결 수립은 핸드쉐이크를 통해 이루어지며 핸드쉐이크 시 HTTP를 이용한다.
+
+### 웹소켓 핸드쉐이크
+핸드쉐이크는 한 번의 HTTP 요청과 HTTP 응답으로 이루어진다. 핸드쉐이크가 끝나면 HTTP 프로토콜을 웹소켓 프로토콜로 변환하여 통신을 하는 구조다.
+
+## Socket.IO
+Socket.IO는 클라이언트와 서버 간의 낮은 지연 시간, 양방향 및 이벤트 기반 통신을 가능하게 하는 라이브러리다. 웹소켓 프로토콜 위에 구축되었으며 HTTP long-polling 또는 자동 재연결에 대한 fallback과 같은 추가적인 보장을 제공한다. 
+
+Socket.IO는 Websocket을 사용하지만, 각 패킷에 추가적인 메타데이터를 추가한다. 그것이 Websocket Client가 Socket.IO Server에 성공적인 연결을 할 수 없는 이유다. Socket.IO Client도 Websocket Server에 연결할 수 없다.
+
+### Socket.IO 기능
+- HTTP long-polling fallback
+- Automatic reconnection
+- Packet buffering
+- Acknowledgements
+- Broadcasting
+- Multiplexing
+
+
+<hr>
+
+출처
+- [웹소켓에 대해 알아보자](https://tecoble.techcourse.co.kr/post/2020-09-20-websocket/)
+- [What Socket.IO is](https://socket.io/docs/v4/#is-socketio-still-needed-today)
+- [웹소켓과 socket.io](https://www.peterkimzz.com/websocket-vs-socket-io/)
+- [WebSocket과 Socket.io](https://d2.naver.com/helloworld/1336)
+
+<hr>
+
+# IPv4 vs IPv6
+## IPv6 개요
+많은 사람들이 휴대 전화 및 휴대용 컴퓨터 등과 같은 모바일 컴퓨터를 사용하게 됨에 따라, 무선 사용자의 증가하는 요구가 IPv4 주소 고갈의 원인이 되고 있다. 따라서 인터넷 프로토콜 버전 4(IPv4)를 대체하는 인터넷 프로토콜 버전 6(IPv6)가 나왔다. 
+
+### 주소
+- IPv4는 32비트 길이(4바이트). `nnn.nnn.nnn.nnn` 의 형태. (0<=nnn<=255). 주소 클래스에 따라 다른 네트워크 및 호스트 부분으로 구성됩니다.
+- IPv6는 128비트 길이(16바이트). `xxxx:xxxx:xxxx:xxxx:xxxx:xxxx:xxxx:xxxx` 의 형태. 기본 구조는 네트워크 번호용 64비트와 호스트 번호용 64비트. 종종 IPv6 주소의 호스트 부분(또는 그 일부)은 MAC 주소나 인터페이스 ID에서 파생.
+
+### IP 헤더
+- IPv4는 현재 IP 옵션에 따라 20-60 바이트의 가변 길이
+- IPv6는 40바이트의 고정 길이. IP 헤더 옵션이 없다. 
+
+### 주소 유형
+- IPv4 주소는 유니캐스트 주소, 멀티캐스트 주소 및 브로드캐스트 주소의 세 가지 기본 유형으로 분류
+- IPv6 주소는 유니캐스트 주소, 멀티캐스트 주소 및 애니캐스트 주소의 세 가지 기본 유형으로 분류
+
+### ARP(주소 해석 프로토콜)
+- IPv4는 ARP(주소 해석 프로토콜)를 사용하여 IPv4 주소와 연관된 MAC 또는 링크 주소와 같은 물리적 주소를 찾는다.
+- IPv6은 ICMPv6(Internet Control Message Protocol version 6)을 사용하여 스테이트리스 자동 구성 및 인접 노드 발견을 위한 알고리즘의 일부로서 IP 자체 내에 이러한 기능을 내장시킨다. 따라서 ARP6과 같은 것은 없다.
+
+<hr>
+
+출처
+- [IPv4와 IPv6의 비교](https://www.ibm.com/docs/ko/i/7.3?topic=6-comparison-ipv4-ipv6)
+
+<hr>
