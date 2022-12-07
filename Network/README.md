@@ -112,3 +112,44 @@ API 개발자는 여러 아키텍처를 사용하여 API를 설계할 수 있다
 - [RESTful API란 무엇입니까?](https://aws.amazon.com/ko/what-is/restful-api/)
 - [What Are RESTful Web Services?](https://docs.oracle.com/javaee/6/tutorial/doc/gijqy.html)
 - [REST API (RESTful API)](https://www.techtarget.com/searchapparchitecture/definition/RESTful-API)
+
+<hr>
+
+# 소켓
+## 개요 
+TCP는 인터넷의 client-server 응용 프로그램이 서로 통신하는 데 사용하는 신뢰할 수 있는 point-to-point 통신 채널을 제공한다. TCP를 통해 통신하기 위해 클라이언트 프로그램과 서버 프로그램은 서로 연결을 설정한다. 각 프로그램은 소켓을 연결 끝에 바인딩한다. 통신을 위해 클라이언트와 서버는 각각 연결에 바인딩된 소켓에서 읽고 쓴다.
+
+소켓은 네트워크에서 실행되는 두 프로그램 사이의 양방향 통신 링크의 한 엔드 포인트이다. Socket 클래스는 클라이언트 프로그램과 클라이언트 프로그램 간의 연결을 나타내는 데 사용된다. java.net 패키지는 Socket 클래스와 ServerSocket 클래스를 제공한다. Socket은 연결의 클라이언트 측을, ServerSocket은 연결의 서버 측을 구현한다. 
+
+웹에 연결하는 경우 Socket 클래스보다 URL 클래스와 관련된 클래스(URLConnection, URLNcoder)가 더 적합할 수 있다. 실제로 URL은 웹에 대한 비교적 높은 수준의 연결이며 기본 구현의 일부로 소켓을 사용한다. 
+
+## 소켓이란
+
+<img src="../imgs/network-socketconnect.gif">
+
+서버: 일반적으로 서버는 특정 컴퓨터에서 실행되며 특정 포트 번호에 바인딩된 소켓이 있다. 서버는 클라이언트가 연결 요청을 할 때까지 소켓을 대기한다. 
+
+클라이언트: 클라이언트는 서버가 실행 중인 컴퓨터의 호스트 이름과 서버가 수신 중인 포트 번호를 알고 있다. 연결 요청을 위해 클라이언트는 서버의 컴퓨터 및 포트에 있는 서버와 만남을 시도한다. 또한 클라이언트는 서버에 대해 자신을 식별하여 이 연결 중에 사용할 로컬 포트 번호를 바인딩해야 한다. 일반적으로 시스템에서 할당한다. 
+
+<img src="../imgs/network-socketconnected.gif">
+
+모든 것이 잘 되면, 서버는 연결을 승인한다. 승인 시 서버는 동일한 로컬 포트에 바인딩된 새 소켓을 가져오고, 원격 엔드포인트를 클라이언트의 주소와 포트로 설정한다. 연결된 클라이언트의 요구를 처리하면서 연결 요청을 위해 원래 소켓을 계속 listen 할 수 있도록 새로운 소켓이 필요하다.
+
+클라이언트 측에서는 연결이 허용되면 소켓이 성공적으로 생성되고 클라이언트는 소켓을 사용하여 서버와 통신할 수 있다. 
+
+클라이언트와 서버는 이제 소켓에 write 하거나 read 함으로써 통신할 수 있다.
+
+```
+Definition:
+
+소켓은 네트워크에서 실행되는 두 프로그램 사이의 양방향 통신 링크의 한 끝점이다. 소켓은 포트 번호에 바인딩되어 TCP 계층이 데이터를 전송할 응용 프로그램을 식별할 수 있다.
+```
+
+엔드포인트는 IP 주소와 포트 번호의 조합이다. 모든 TCP 연결은 두 개의 엔드포인트에 의해 고유하게 식별될 수 있다. 일허게 하면 호스트와 서버 간에 여러 연결을 가질 수 있다. 
+
+<hr>
+
+출처
+- [All About Sockets](https://docs.oracle.com/javase/tutorial/networking/sockets/index.html)
+
+<hr>
