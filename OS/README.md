@@ -839,3 +839,55 @@ D가 프레임에 대한 총 수요이고, WSS가 프로세스 i에 대한 worki
 출처
 - [Techniques to handle Thrashing
 ](https://www.geeksforgeeks.org/techniques-to-handle-thrashing/)
+
+<hr>
+
+# 프로세스 스케줄러
+프로세스 스케줄링은 CPU에서 실행중인 프로세스를 제거하고 특정 전략을 기반으로 다른 프로세스를 선택하는 프로세스 관리자의 활동이다. 
+
+프로세스 스케줄링은 멀티프로그래밍 운영체제에 필수적인 부분이다. 이러한 운영체제는 한 번에 하나 이상의 프로세스를 실행 가능한 메모리에 적재할 수 있으며 적재된 프로세스들은 시분할 다중화를 사용해 CPU를 공유한다.
+
+프로세스 스케줄러에 3가지 종류가 있다. 
+- 장기 스케줄러(Long Term or job scheduler)
+- 단기 스케줄러(Short term or CPU scheduler)
+- 중기 스케줄러(Medium-term scheduler)
+
+## 프로세스 스케줄링하기 위한 Queue
+프로세스를 스케줄링하기 위한 Queue에도 세 가지 종류가 존재한다.
+- Job Queue: 현재 시스템 내에 있는 모든 프로세스의 집합
+- Ready Queue: 현재 메모리 내에 있으면서 CPU를 잡아서 실행되기를 기다리는 프로세스의 집합
+- Device Queue: Device I/O 작업을 대기하고 있는 프로세스의 집합
+
+## 장기 스케줄러
+- Ready Queue에 적재하는 메모리와 디스크 사이의 스케줄링을 담당하는 스케줄러
+- 수행할 job이 10개, 메모리에는 6개 밖에 올릴 수 없는 상황. job 10개 중 6개를 골라서 올려야 하는데 이때 job을 고르는 역할을 하는 것이 장기 스케줄러. 따라서 job 스케줄러라고 불리기도 한다.
+- 멀티프로그래밍의 정도를 제어한다, 즉 임의의 시점에서 준비 상태에 있는 프로세스의 수를 제어한다. == 메모리에 동시에 올라가 있는 프로세스의 수를 조절한다. 
+- I/O bound 중심의 프로세스들과 CPU bound 프로세스들의 적절한 비율을 조절해 올린다. I/O 바인딩 작업은 입출력 작업에 많은 시간을 사용하는 반면, CPU 바인딩 프로세스는 CPU에 시간을 소비한다. 작업(job) 스케줄러는 둘 사이의 균형을 유지하여 효율성을 높인다.
+- 프로세스의 상태를 New 에서 Ready 상태로 전환한다. 
+- 가상 메모리가 나오면서 수행할 job 10개 중 6개 밖에 올릴 수 없는 상황은 나오지 않는다. 10개 중 10개를 다 올릴 수 있다. 
+
+## 단기 스케줄러
+- 장기 스케줄러를 통해서 job을 6개를 고른 상태. 실제 CPU가 수행하는 것은 하나. Ready Queue에 있는 job 중 하나를 골라야하는데 이걸 골라주는 스케줄러. 따라서 CPU 스케줄러라고 불리기도 한다.
+- Running 상태에서 스케줄링하기 위해 Ready 상태에서 하나의 프로세스를 선택하는 역할을 한다. 
+- 단기 스케줄러는 실행 중에 프로세스를 로드하지 않고 스케줄링할 프로세스만 선택한다. CPU 스케줄러는 높은 burst 시간 프로세스로 인해 기아가 발생하지 않도록 보장한다.
+- Dispathcer는 단기 스케줄러에 의해 선택된 프로세스를 CPU에 로드하는 책임이 있다. Context Switching은 dispathcer에 의해서만 수행된다. 
+
+Dispathcer는 다음을 수행한다.
+1. Switching context.
+2. Switching to user mode.
+3. Jumping to the proper location in the newly loaded program.
+
+## 중기 스케줄러
+- 장기 스케줄러에 의해 10개 중 6개의 job을 올려서 수행중인 상태. CPU가 수행하려고 보니 감당하기엔 너무 많아 문제가 생겨 6개 중 2개를 내려보내면 상황이 해결될 것. 6개 중 뭘 내려보낼지 결정하는 것이 중기 스케줄러의 역할 
+Swapper라고도 불린다.
+- 프로세스를 중단하고 재개할 책임이 있다. 주로 swapping(프로세스를 메모리에서 디스크로 이동하거나 그 반대)을 한다.
+- I/O 바운드와 CPU 바운드 간의 완벽한 균형을 유지하는데 도움을 준다. 그것은 멀티프로그래밍의 정도를 줄여준다. 
+
+## 결론
+가상 메모리 발달로 현재는 단기 스케줄러만 남아있다. 
+
+<hr>
+
+출처
+- [Process Schedulers in Operating System](https://www.geeksforgeeks.org/process-schedulers-in-operating-system/)
+- [장기스케줄러 vs 중기스케줄러 vs 단기스케줄러](https://jhnyang.tistory.com/372)
