@@ -783,3 +783,59 @@ RAID에는 여러 종류에 RAID 레벨이 있는데 대표적인 RAID 구성 �
 - [RAID가 뭐에요?](https://www.dknyou.com/blog/?q=YToxOntzOjEyOiJrZXl3b3JkX3R5cGUiO3M6MzoiYWxsIjt9&bmode=view&idx=7342927&t=board)
 
 <hr>
+
+# Thrashing
+## Thrashing이란
+페이지 폴트를 처리하는데 대부분의 시간을 소비하는 상태 또는 상황이다. 
+
+## Thrashing의 원인
+- Thrashing은 운영체제 실행 성능에 영향을 미친다.
+- Thrashing은 운영채재애소 심각한 성능 문제를 야기한다.
+- CPU의 사용량이 적을 때, 프로세스 스케줄링 메커니즘은 여러 프로세스를 동시에 메모리에 적재하려고 시도하여 멀티 프로그래밍의 정도를 증가시킨다.
+- 이 경우 메모리의 프로세스 수가 메모리에서 사용 가능한 프레임 수를 초과한다. 각 프로세스에는 작업할 프레임 수가 지정된다.
+- 우선순위가 높은 프로세스가 메모리에 도착하고 현재 메모리 프레임이 비어있지 않으면, 프레임을 차지하고 있던 다른 프로세스가 보조 저장소로 이동하고 비어있는 프레임에 우선순위가 높은 프로세스가 할당된다.
+- 메모리가 가득 차자마자 필요한 페이지를 교환하는 데 오랜 시간이 걸린다. 대부분의 프로세스가 페이지를 기다리고 있기 때문에 CPU 사용률이 떨어진다. 
+- 결과적으로 높은 수준의 멀티 프로그래밍과 프레임 부족은 운영체제에서 스레싱이 발생되는 가장 일반적인 두 가지 이유다.
+
+<img src="../imgs/os-thrashing.png">
+
+- 프로세스에 너무 적은 프레임이 할당되면, page fault가 너무 많고 자주 발생한다. 
+- 결과적으로 CPU에 의해 유용한 작업이 수행되지 않을 것이고 CPU 활용률은 급격하게 떨어질 것이다. 
+- 그러면 장기 스케줄러는 메모리에 더 많은 프로세스를 로드하여 멀티 프로그래밍의 정도를 증가시킴으로써 CPU 활용률을 높이려 할 것이다.
+- 이것은 CPU 사용률의 추가적인 감소를 초래하여 더 높은 page fault를 발생시키고 Thrashing을 발생시킨다.
+  
+## Locality Model
+- 지역성(locality)는 함께 활발히 사용되는 페이지들의 집합이다. 한 프로세스가 실행될 때, 한 지역성에서 다른 지역성으로 이동한다. 
+- 예를 들어 함수가 호출되면, 함수 호출 명령(지역 변수, 로컬 변수 등)에 대한 메모리 참조가 이루어지는 새로운 지역성을 정의한다. 마찬가지로 함수가 종료되면 프로세스는 이 지역성을 벗어난다.
+
+## Techniques to handle: 
+### 1. Working Set Model
+- Working Set Model은 Locality Model 개념을 기반으로 한다. 
+- 기본 원칙은 프로세스에 현재 지역성을 수용할 수 있는 충분한 프레임을 할당하면 프로세스가 새로운 지역성으로 이동할 때만 page fault가 발생한다는 것이다. 그러나 할당된 프레임이 현재 지역성의 크기보다 작으면 프로세스가 thrash 하게 될 수 있다.
+- 이 모델에 따르면 매개 변수 A를 기준으로 working set은 가장 최근의 'A' 페이지 참조에서의 페이지 집합으로 정의된다. 그러므로 현재 사용 중인 모든 페이지는 항상 working set의 일부가 된다.
+- working set의 정확도는 매개 변수 A의 값에 달라진다. A가 너무 크면 workings set들이 겹칠 수도 있다. 반면에 A의 값이 너무 작으면 지역성이 전체적으로 포함되지 않을 수 있다.
+
+D가 프레임에 대한 총 수요이고, WSS가 프로세스 i에 대한 working set 크기라면
+
+<img src="../imgs/os-workingset.png">
+
+'m'이 메모리에 사용 가능한 프레임 수이라면 두 가지 가능성이 있다.
+- (i) D > m : 총 수요가 프레임 수를 초과하면 일부 프로세스가 충분한 프레임을 얻지 못해 Thrashing이 발생한다.
+- (ii) D <= m : Thrashing이 발생하지 않는다.
+
+### 2. Page Fault Frequency
+
+<img src="../imgs/os-pagefaultfrequency.png">
+
+- Thrashing 처리에 보다 직접적인 접근 방식은 Page-Fault Frequency 개념을 사용하는 것이다.
+- Page-Fault Rate를 제어하는 방식이다.
+- 어떻게 제어하느냐, 하면 Page-Fault Rate에서 일정 기준 이상 올라가거나 내려갔을 때 어떤 조치를 취한다. 즉 상한선과 하한선을 정한다는 말이다.
+- Page-Fault Rate가 너무 높으면 프로세스에 할당된 프레임 수가 너무 적다는 것을 나타낸다. 반면 Page-Fault Rate이 낮으면 프로세스에 프레임이 너무 많다는 것을 나타낸다.
+- 만약 Page-Fault Rate가 하한선보다 낮게 되면, 프로세스에서 프레임을 제거할 수 있다. 마찬가지로 상한선 보다 높게 되면 프로세스에 더 많은 프레임을 할당할 수 있다.
+- 비어있는 프레임이 없는데 Page-Fault Rate가 높다면, 일부 프로세스를 일시 중단하고 그들의 프레임을 다른 프로세스에게 재할당할 수 있다. 
+
+<hr>
+
+출처
+- [Techniques to handle Thrashing
+](https://www.geeksforgeeks.org/techniques-to-handle-thrashing/)
