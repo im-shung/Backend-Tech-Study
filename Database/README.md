@@ -257,3 +257,57 @@ Redo Log가 트랜잭션 Commit과 CheckPoint 시 디스크에 기록되지만, 
 - [🙈[DB이론] 신뢰성과 회복(Recovery)🐵](https://victorydntmd.tistory.com/130)
 
 <hr>
+
+# DELETE, TRUNCATE, DROP 차이
+## DELETE
+```
+DELETE [LOW_PRIORITY] [QUICK] [IGNORE] FROM tbl_name [[AS] tbl_alias]
+    [PARTITION (partition_name [, partition_name] ...)]
+    [WHERE where_condition]
+    [ORDER BY ...]
+    [LIMIT row_count]
+```
+- WHERE 절을 사용하여 데이터를 하나하나 선택해서 제거하는 방식
+  - `DELETE FROM dbtable WHERE {조건};`
+- WHERE 절을 사용하지 않고 테이블의 모든 데이터를 삭제하더라도, 내부적으로는 한 줄씩 제거된다.
+  - `DELETE FROM dbtable;` 
+- 원하는 데이터만 골라서 삭제할 때는 DELETE 사용 / 전체 데이터를 삭제할 때는 TRUNCATE 사용
+- 데이터를 삭제하더라도 데이터가 담겨있던 Storage는 Release 되지 않는다.
+- DELETE된 데이터는 COMMIT 명령어를 사용하기 전이라면 ROLLBACK 명령어를 통해 되돌릴 수 있다.
+- 모든 작업을 로그에 남긴다.
+
+## TRUNCATE
+```
+TRUNCATE [TABLE] tbl_name
+```
+- 테이블을 완전히 비운다. `DROP` 권한이 필요하다.
+- 논리적으로 모든 행을 삭제하는 `DELETE` 문 또는 연속의 `DROP TABLE` 과 `CRATE TABLE` 문과 유사하다.
+- 고성능을 위해 데이터 삭제의 DML을 bypass(우회)한다. 따라서 `ON DELETE` 트리거가 발생하지 않으며 부모-자녀 외부 키 관겨가 있는 InnoDB 테이블에 대해 수행할 수 없으며 DML 처럼 롤백할 수 없다. 그러나 automic DDL을 지원하는 스토리지 엔진을 사용하는 테이블의 `TRUNCATE TABLE` 작업은 서버가 작업 중에 중지되면 완전히 커밋되거나 롤백된다.
+- `DELETE` 문과 유사하지만 DML문이 아닌 DDL문으로 분류된다. 다음과 같은 점에서 DELETE와 다르다.
+
+### TRUNCATE가 DELETE와 다른 점 
+- 행을 하나씩 삭제하는 `DELETE`보다 테이블을 drop 후 re-create하는 `TRUNCATE`가 속도가 더 빠르다.
+- `TRUNCATE`는 암시적 커밋을 실행하므로 롤백할 수 없다.
+- 이진 로깅과 replication(복제)를 위해 DDL로 처리되며 항상 로깅된다.
+
+
+## DROP
+```
+DROP [TEMPORARY] TABLE [IF EXISTS]
+    tbl_name [, tbl_name] ...
+    [RESTRICT | CASCADE]
+```
+- 하나 이상의 테이블을 제거한다.
+- 테이블이 파티셔닝 된 경우, 테이블의 정의, 테이블의 모든 파티션, 해당 파티션에 저장된 모든 데이터 및 삭제된 테이블과 관련된 모든 파티션 정의가 제거된다.
+- 테이블을 삭제하면 테이블에 대한 트리거도 삭제된다.
+- `TEMPORY` 키워드와 함께 사용되는 경우를 제외하고 암시적 커밋을 실행한다.
+- 테이블이 삭제되어도 테이블에 대해 특별히 부여된 권한은 자동으로 삭제되지 않는다. 수동으로 삭제해야 한다. 
+
+<hr>
+
+출처
+- [Delete vs truncate vs drop 차이점](https://itblacksmith.tistory.com/72)
+- [13.1.37 TRUNCATE TABLE Statement](https://dev.mysql.com/doc/refman/8.0/en/truncate-table.html)
+- [13.1.32 DROP TABLE Statement](https://dev.mysql.com/doc/refman/8.0/en/drop-table.html)
+
+<hr>
