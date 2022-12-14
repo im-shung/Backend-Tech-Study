@@ -407,3 +407,30 @@ DROP [TEMPORARY] TABLE [IF EXISTS]
 - [Denormalization in Databases](https://www.geeksforgeeks.org/denormalization-in-databases/)
 
 <hr>
+
+# MySQL에서 대량의 데이터(500만개 이상)를 Insert해야하는 경우엔 어떻게 해야할까요?
+삽입 속도를 최적화하려면 많은 small 작업을 하나의 large 작업으로 결합하라.
+### 1. multiple VALUES
+```
+INSERT INTO yourtable VALUES (1,2), (5,5), ...;
+```
+- 동일한 클라이언트에 여러 행을 동시에 삽입하는 경우 여러 `VALUES` 목록이 있는 `INSERT` 문을 사용하여 한 번에 여러 행을 삽입한다. 
+- 단일 행 INSERT 문 여러 개를 사용하는 것보다 상당히 빠르다.
+- 비어있지 않은 테이블에 데이터를 추가하는 경우 `bulk_insert_buffer_size` 변수를 조정해 데이터 삽입 속도를 빠르게 할 수 있다. 
+- `INSERT ... VALUES` 문으로 하드코딩하는 경우 클라이언트가 데이터베이스 서버로 보내는 SQL 문의 길이를 제한하는 `max_allowed_packet` 변수의 값을 조절해야 한다.
+
+### 2. LOAD DATA
+```
+LOAD DATA INFILE 'data.txt' INTO TABLE db2.my_table;
+```
+- 텍스트 파일을 이용해 데이터를 삽입한다. 
+- 보통 `INSERT` 문을 사용하는 것보다 20배 더 빠르다. 
+
+<hr>
+
+출처
+- [MySQL 8.0 Reference Manual - 8.2.5.1 Optimizing INSERT Statements](https://dev.mysql.com/doc/refman/8.0/en/insert-optimization.html)
+- [MySQL - how many rows can I insert in one single INSERT statement?](https://stackoverflow.com/questions/3536103/mysql-how-many-rows-can-i-insert-in-one-single-insert-statement)
+- [MySQL 에서의 Bulk Inserting 성능 향상](https://jins-dev.tistory.com/entry/MySQL-%EC%97%90%EC%84%9C%EC%9D%98-Bulk-Inserting-%EC%84%B1%EB%8A%A5-%ED%96%A5%EC%83%81)
+
+<hr>
