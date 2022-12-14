@@ -379,6 +379,94 @@ DROP [TEMPORARY] TABLE [IF EXISTS]
 
 <hr>
 
+# 정규화 (Normalization)
+- 데이터 중복성을 줄이거나 없애기 위해 데이터베이스의 속성을 구성하는 과정이다. 
+- 데이터 중복은 동일한 데이터가 여러 곳에서 반복되기 때문에 데이터베이스의 크기를 불필요하게 증가시킨다. 
+- 삽입, 삭제, 업데이트 작업 중에도 불일치(Inconsistency) 문제가 발생한다.
+
+## 함수 종속성 (Functional Dependency)
+- 함수 종속성은 데이터베이스와 관련된 두 속성 집합 사이의 제약 조건이다.
+- 일반적으로 테이블 내의 기본 키 속성과 키가 아닌 속성 사이에 존재한다.
+- 함수 종속성은 화살표(→)로 표시된다.
+- 속성 A가 B를 함수적으로 결정하면, `A → B` 로 표시된다.
+  - 예를 들어, `employee_id → employee_name` 은 `employee_id`가 함수적으로 `employee_name`을 결정함을 의미한다. `employee_name`은 함수적으로 `employee_id`에 의존한다.
+- A는 결정 인자(determinant set), B는 종속 인자(dependent set)
+- `A → B`는 A의 특정 값의 모든 인스턴스에 B의 동일한 값이 있음을 의미한다.
+  - 아래 표는 `A → B`는 참이지만 `B → A`는 참이 아니다. `B = 3` 에 대한 A 값이 다르기 때문이다.
+    ```
+    A   B
+    ------
+    1   3
+    2   3
+    4   0
+    1   3
+    4   0
+    ```
+### 완전 함수 종속성 (Fully Functional Dependency)
+- 만약 X와 Y가 관계의 속성 집합이라면, Y는 X에 의존한다. 그리고 X의 어떤 적절한 부분 집합에도 의존하지 않는다면, Y는 X에 <strong>완전히</strong> 의존한다.
+- Ex. `ABC → D`의 관계에서, 속성 D는 ABC의 어떤 부분 집합에도 의존하지 않고 ABC에 완전히 의존한다. 다시 말해, AB, BC, A, B 등과 같은 ABC의 부분 집합은 D를 결정할 수 없다.
+
+### 부분 함수 종속성 (Partial Functional Dependency)
+- `X → Y` 는 Y가 X에 함수적으로 종속되어 있고, Y가 X의 부분 집합에 의해 결정되어 있으면 부분 함수 종속성이다.
+- Ex. `AC → B`, `A → D`, `D → B` 의 관계가 있다. 이제 `A → D → B` 로 A는 단독으로 B를 결정할 수 있다. 이는 B가 부분적으로 AC에 의존한다는 것을 의미한다.
+
+### Trivial Functional Dependency
+- 만약 B가 A의 부분 집합인 경우 `A → B`는 trivial 함수 종속성을 갖는다.
+  - Ex. 
+    ```
+    {Employee_id, Employee_Name} → Employee_Id
+    ```
+- `A → A`, `B → B` 의 경우도 trivial 함수 종속성을 갖는다.
+
+
+### Non-trivial Functional Dependency
+- 만약 B가 A의 부분 집합이 아닌 경우 `A → B`는 non-trivial 함수 종속성을 갖는다.
+  - Ex. 
+    ```
+    ID   →    Name
+    Name →    DOB  
+    ```
+
+<hr>
+
+출처
+- [Introduction of Database Normalization](https://www.geeksforgeeks.org/introduction-of-database-normalization/)
+- [Differentiate between Partial Dependency and Fully Functional Dependency](https://www.geeksforgeeks.org/differentiate-between-partial-dependency-and-fully-functional-dependency/)
+- [Functional Dependency](https://www.javatpoint.com/dbms-functional-dependency)
+
+<hr>
+
+# 정규화 레벨 
+## 제 1 정규화 (First Normal Form, 1NF)
+- 각 칼럼은 원자 값을 갖어야 한다.
+  - 원자 값 = 더 이상 논리적으로 분해될 수 없는 값
+- 하나의 컬럼은 같은 종류나 타입(type)을 가져야 한다.
+- 각 컬럼이 유일한(unique) 이름을 가져야 한다.
+- 칼럼의 순서가 상관없어야 한다.
+
+## 제 2 정규화 (Second Normal Form, 2NF)
+- 1NF를 만족해야 한다.
+- 모든 칼럼이 부분적 함수 종속(Partial Functional Dependency)이 없어야 한다. = 모든 칼럼이 완전 함수 종속(Fully Functional Dependency)을 만족해야 한다.
+
+## 제 3 정규화 (Third Normal Form, 3NF)
+- 2NF를 만족해야 한다.
+- 이행적 함수 종속성(Transitive Functional Dependency)가 존재하지 않아야 한다.
+  - `A → D`, `D → B` 이면 `A → B`를 만족하게 되는 것을 의미한다.
+  
+## Boyce-Codd Normal Form (BCNF)
+- 3NF를 만족해야 한다.
+- 다음 한목 중 적어도 하나를 만족해야 한다.
+  - (1) 모든 Functional Dependency는 Trivial 해야 한다.
+  - (2) 모든 Functional Dependency의 Determinant Set은 Superkey여야 한다.
+
+<hr>
+
+출처
+- [Database Normalization & Functional Dependency](https://ju-hy.tistory.com/104)
+- [정규형 (1NF, 2NF, 3NF, BCNF)](https://rebro.kr/160)
+
+<hr>
+
 ## 역정규화 (Denormalization)
 - 하나 이상의 테이블에 중복 데이터를 추가하는 데이터베이스 최적화 기술이다.
 - 이것은 우리가 관계형 데이터베이스에서 비용이 높은 조인을 피하는데 도움이 될 수 있다.
