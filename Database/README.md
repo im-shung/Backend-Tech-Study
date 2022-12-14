@@ -378,3 +378,32 @@ DROP [TEMPORARY] TABLE [IF EXISTS]
 - [데이터베이스 튜닝이란?](http://wiki.gurubee.net/pages/viewpage.action?pageId=14024765)
 
 <hr>
+
+## 역정규화 (Denormalization)
+- 하나 이상의 테이블에 중복 데이터를 추가하는 데이터베이스 최적화 기술이다.
+- 이것은 우리가 관계형 데이터베이스에서 비용이 높은 조인을 피하는데 도움이 될 수 있다.
+- denormalization은 'reversing normalization' 또는 'not to normalization'을 의미하지 않는다.
+- 역정규화는 정규화 후 적용되는 최적화 기법이다. 
+  - 기본적으로 정규화 된 스키마를 가져 와서 정규화되지 않게 만드는 프로세스를 비정규화라고 한다.
+- 기존의 정규화된 데이터베이스에서는 데이터를 별도의 논리 테이블에 저장하고 중복 데이터를 최소화하려고 시도한다. 정규화는 데이터 수정 면에서 장점이 있지만, 테이블이 크면 조인을 수행하는데 불필요하게 오랜 시간을 소비할 수 있다는 단점이 있다. 
+
+### 장점과 단점
+장점
+- 더 적은 조인을 수행하기 때문에 데이터 검색이 더 빠르다.
+
+단점
+- 데이터 update와 insert는 비용이 비싸다.
+- 역정규화는 update와 insert 코드 작성을 더 어렵게 만들 수 있다.
+- 데이터 불일치 문제
+- 데이터 중복으로 더 많은 스토리지가 쓰인다.
+
+### 반정규화 기법
+자세히는 [여기](https://dataonair.or.kr/db-tech-reference/d-guide/sql/?mod=document&uid=333) 참고
+
+<hr>
+
+출처
+- [반정규화와 성능](https://dataonair.or.kr/db-tech-reference/d-guide/sql/?mod=document&uid=333)
+- [Denormalization in Databases](https://www.geeksforgeeks.org/denormalization-in-databases/)
+
+<hr>
