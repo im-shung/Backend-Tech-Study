@@ -12,6 +12,7 @@ CS 공부
 -  [역정규화 (Denormalization)](https://github.com/im-shung/CS-Study/blob/main/Database/README.md#역정규화-denormalization)
 -  [MySQL에서 대량의 데이터(500만개 이상)를 Insert해야하는 경우엔 어떻게 해야할까요?](https://github.com/im-shung/CS-Study/blob/main/Database/README.md#mysql에서-대량의-데이터500만개-이상를-insert해야하는-경우엔-어떻게-해야할까요)
 -  [데이터베이스 파티셔닝(Database Partitioning)](https://github.com/im-shung/CS-Study/blob/main/Database/README.md#데이터베이스-파티셔닝database-partitioning)
+-  [WHERE과 HAVING의 차이](https://github.com/im-shung/CS-Study/blob/main/Database/README.md#where-과-having-의-차이)
 ## [운영체제](https://github.com/im-shung/CS-Study/blob/main/OS/README.md)
 -  [프로세스](https://github.com/im-shung/CS-Study/blob/main/OS/README.md#프로세스)
 -  [커널의 프로세스 관리](https://github.com/im-shung/CS-Study/blob/main/OS/README.md#커널의-프로세스-관리)
