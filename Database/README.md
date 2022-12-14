@@ -612,3 +612,25 @@ LOAD DATA INFILE 'data.txt' INTO TABLE db2.my_table;
 - [파티션 테이블(Partition Table)이란 무엇인가?](https://coding-factory.tistory.com/840)
 
 <hr>
+
+# `WHERE` 과 `HAVING` 의 차이  
+## `WHERE`
+```
+SELECT * From db_table [WHERE where_condition]
+```
+- 집계(그룹) 함수를 제외하고 MySQL이 지원하는 모든 함수 및 연산자를 사용할 수 있다.
+
+## `HAVING`
+```
+SELECT * From db_table [GROUP BY {col_name | expr | position}, ... [WITH ROLLUP]] [HAVING where_condition]
+```
+- `WHERE` 절과 마찬가지로 선택 조건을 지정한다.
+- 일반적으로 `GROUP BY` 절에 의해 형성되는 그룹의 조건을 지정한다. 쿼리 결과에는 `HAVING` 조건을 만족하는 그룹만 포함된다. `GROUP BY` 가 없는 경우 모든 행이 암시적으로 단일 집계 그룹을 형성한다. 
+- `HAVING` 절은 최적화없이 항목이 전송되기 직전에 거의 마지막에 적용된다.
+
+<hr>
+
+출처
+- [MySQL 8.0 Reference Manual - 13.2.13 SELECT Statement](https://dev.mysql.com/doc/refman/8.0/en/select.html)
+
+<hr>
