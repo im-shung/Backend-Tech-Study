@@ -311,3 +311,34 @@ DROP [TEMPORARY] TABLE [IF EXISTS]
 - [13.1.32 DROP TABLE Statement](https://dev.mysql.com/doc/refman/8.0/en/drop-table.html)
 
 <hr>
+
+# ORM 
+## Object-Relational-Mapping
+- 객체-관계 매핑
+- 프로그래밍 언어의 객체 지향 패러다임을 사용하여 SQL 쿼리를 작성할 수 있는 아이디어
+- 즉, SQL 대신 우리가 선택한 언어를 사용하여 데이터베이스와 상호작용 하려고 한다.
+- 여기서 Object-relational-mapper가 등장한다. 대부분의 사람들이 "ORM"이라고 말하면 이 기술을 구현하는 라이브러리를 나타낸다.
+- 대부분의 경우 객체 지향 프로그램과 관계형 데이터베이스 사이의 다리를 만드는 데 사용되는 기술이다. 즉, ORM은 객체 지향 프로그래밍(OOP)을 관계형 데이터베이스에 연결하는 계층으로 볼 수 있다. 
+- 웹 애플리케이션과 데이터베이스 사이에 위치하는  미들웨어 어플리케이션 또는 도구이다.
+- Model 클래스가 데이터베이스의 테이블이 되고 각 인스턴스가 테이블의 행이 되는 방식으로 매핑을 수행한다.
+
+## 장점과 단점
+장점
+- 객체 지향적인 코드로 인해 더 직관적이다. 비즈니스 로직에 집중할 수 있게 도와준다.
+  - SQL의 절차적이고 순차적인 접근이 아닌 객체 지향적인 접근으로 인해 생산성이 증가한다.
+- 복잡한 과정을 숨김으로써 고수준의 구현만 신경쓰면 된다. 
+- 데이터베이스 시스템을 추상화하여 데이터베이스를 변경해도 코드를 변경할 필요가 없다.
+
+단점
+- ORM이 복잡한 세부 정보를 추상화하는 데 도움이 되더라도 각 명령의 결과를 알고 있어야 한다.
+- ORM을 사용하여 복잡한 쿼리를 코딩하는 데 성능 문제가 발생할 수 있다.
+
+<hr>
+
+출처
+- [What is an ORM – The Meaning of Object Relational Mapping Database Tools](https://www.freecodecamp.org/news/what-is-an-orm-the-meaning-of-object-relational-mapping-database-tools/)
+- [ORM Tools in Java](https://www.javatpoint.com/orm-tools-in-java)
+- [ORM이란](https://gmlwjd9405.github.io/2019/02/01/orm.html)
+- [What is an ORM and Why You Should Use it](https://blog.bitsrc.io/what-is-an-orm-and-why-you-should-use-it-b2b6f75f5e2a)
+
+<hr>
