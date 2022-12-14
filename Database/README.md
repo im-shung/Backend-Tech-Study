@@ -342,3 +342,39 @@ DROP [TEMPORARY] TABLE [IF EXISTS]
 - [What is an ORM and Why You Should Use it](https://blog.bitsrc.io/what-is-an-orm-and-why-you-should-use-it-b2b6f75f5e2a)
 
 <hr>
+
+# 데이터베이스 튜닝 (Database tuning)
+## 개념
+- 데이터베이스 어플리케이션, 데이터베이스 시스템, 운영체제의 이해를 바탕으로, 불합리한 요소를 찾아 제거/수정하여 성능을 개선하기 위한 일련의 작업
+- 특히 데이터베이스 어플리케이션이 높은 작업 처리량과 짧은 응답시간을 갖도록 하는 것이 중요하다.
+## 목적 
+- 데이터베이스 설계 및 활용에 존재하는 문제점을 파악하여 분석하고, 이렇게 분석된 문제점들을 해결함으로써 데이터베이스의 활용 성능을 최적화시킨다.
+- 데이터베이스 튜닝을 수행함으로써 데이터베이스를 활용하는 시스템을 안정시키고, 또한 사용자의 만족과 관리자의 관리 능력을 향상시킬 수 있다. 
+
+## 튜닝 3단계 
+### 1. DB 설계 튜닝 (모델링 관점)
+- <strong>데이터베이스 설계 단계</strong>에서 성능을 고려하여 설계
+- 데이터 모델링, 인덱스 설계
+- 데이터파일, 테이블 스페이스 설계
+- 데이터베이스 용량 산정
+- Ex. 반정규화, 분산파일, 배치
+
+### 2. DBMS 튜닝 (환경 관점)
+- 성능을 고려하여 메모리나 블록 크기 지정
+- CPU, 메모리 I/O에 대한 관점
+- Ex. Buffer 크기, Cache 크기
+
+### 3. SQL 튜닝 (APP 관점)
+- SQL 작성 시 성능 고려
+- Join, Indexing, SQL Execution Plan
+- Ex. Hash, Join
+
+
+<hr>
+
+출처
+- [데이터베이스 튜닝 (DB Tuning)](http://blog.skby.net/%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%B2%A0%EC%9D%B4%EC%8A%A4-%ED%8A%9C%EB%8B%9D-db-tuning/)
+- [데이터베이스 튜닝](https://dataonair.or.kr/db-tech-reference/d-lounge/report/?mod=document&uid=239679)
+- [데이터베이스 튜닝이란?](http://wiki.gurubee.net/pages/viewpage.action?pageId=14024765)
+
+<hr>
