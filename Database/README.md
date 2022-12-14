@@ -369,7 +369,6 @@ DROP [TEMPORARY] TABLE [IF EXISTS]
 - Join, Indexing, SQL Execution Plan
 - Ex. Hash, Join
 
-
 <hr>
 
 출처
@@ -379,12 +378,7 @@ DROP [TEMPORARY] TABLE [IF EXISTS]
 
 <hr>
 
-# 정규화 (Normalization)
-- 데이터 중복성을 줄이거나 없애기 위해 데이터베이스의 속성을 구성하는 과정이다. 
-- 데이터 중복은 동일한 데이터가 여러 곳에서 반복되기 때문에 데이터베이스의 크기를 불필요하게 증가시킨다. 
-- 삽입, 삭제, 업데이트 작업 중에도 불일치(Inconsistency) 문제가 발생한다.
-
-## 함수 종속성 (Functional Dependency)
+# 함수 종속성 (Functional Dependency)
 - 함수 종속성은 데이터베이스와 관련된 두 속성 집합 사이의 제약 조건이다.
 - 일반적으로 테이블 내의 기본 키 속성과 키가 아닌 속성 사이에 존재한다.
 - 함수 종속성은 화살표(→)로 표시된다.
@@ -402,15 +396,15 @@ DROP [TEMPORARY] TABLE [IF EXISTS]
     1   3
     4   0
     ```
-### 완전 함수 종속성 (Fully Functional Dependency)
+## 완전 함수 종속성 (Fully Functional Dependency)
 - 만약 X와 Y가 관계의 속성 집합이라면, Y는 X에 의존한다. 그리고 X의 어떤 적절한 부분 집합에도 의존하지 않는다면, Y는 X에 <strong>완전히</strong> 의존한다.
 - Ex. `ABC → D`의 관계에서, 속성 D는 ABC의 어떤 부분 집합에도 의존하지 않고 ABC에 완전히 의존한다. 다시 말해, AB, BC, A, B 등과 같은 ABC의 부분 집합은 D를 결정할 수 없다.
 
-### 부분 함수 종속성 (Partial Functional Dependency)
+## 부분 함수 종속성 (Partial Functional Dependency)
 - `X → Y` 는 Y가 X에 함수적으로 종속되어 있고, Y가 X의 부분 집합에 의해 결정되어 있으면 부분 함수 종속성이다.
 - Ex. `AC → B`, `A → D`, `D → B` 의 관계가 있다. 이제 `A → D → B` 로 A는 단독으로 B를 결정할 수 있다. 이는 B가 부분적으로 AC에 의존한다는 것을 의미한다.
 
-### Trivial Functional Dependency
+## Trivial Functional Dependency
 - 만약 B가 A의 부분 집합인 경우 `A → B`는 trivial 함수 종속성을 갖는다.
   - Ex. 
     ```
@@ -419,20 +413,43 @@ DROP [TEMPORARY] TABLE [IF EXISTS]
 - `A → A`, `B → B` 의 경우도 trivial 함수 종속성을 갖는다.
 
 
-### Non-trivial Functional Dependency
+## Non-trivial Functional Dependency
 - 만약 B가 A의 부분 집합이 아닌 경우 `A → B`는 non-trivial 함수 종속성을 갖는다.
   - Ex. 
     ```
     ID   →    Name
     Name →    DOB  
     ```
-
 <hr>
 
 출처
 - [Introduction of Database Normalization](https://www.geeksforgeeks.org/introduction-of-database-normalization/)
 - [Differentiate between Partial Dependency and Fully Functional Dependency](https://www.geeksforgeeks.org/differentiate-between-partial-dependency-and-fully-functional-dependency/)
 - [Functional Dependency](https://www.javatpoint.com/dbms-functional-dependency)
+
+<hr>
+
+# 정규화 (Normalization)
+- 데이터 중복성을 줄이거나 없애기 위해 데이터베이스의 속성을 구성하는 과정이다. 
+- 데이터 중복은 동일한 데이터가 여러 곳에서 반복되기 때문에 데이터베이스의 크기를 불필요하게 증가시킨다. 
+- 삽입, 삭제, 업데이트 작업 중에도 불일치(Inconsistency) 문제가 발생한다.
+
+## 장점과 단점
+장점
+- 데이터베이스를 표준화해 데이터베이스 크기가 줄어들고 데이터 중복을 방지한다. 
+- 여러 위치에서 중복되는 데이터가 없으므로 삽입과 업데이트가 빠르게 실행된다.
+- 정규화된 테이블은 정규화되지 않은 테이블보다 작다. 이는 일반적으로 테이블이 버퍼에 들어갈 수 있으므로 더 빠른 성능을 제공한다. 
+- 데이터 무결성과 일관성이 유지된다. 
+- 데이터베이스 변경 시 이상 현상(Anomaly)이 제거된다. 
+
+단점
+- 데이터가 중복되지 않으므로 테이블 조인이 필요하다. 쿼리가 더 복잡해지고 읽기 시간이 느려진다. 
+- 조인이 필요하기 때문에 인덱싱이 효율적으로 작동하지 않는다. 읽기 시간이 느려진다. 
+
+<hr>
+
+출처
+- [Pros and Cons of Database Normalization](https://dzone.com/articles/pros-and-cons-of-database-normalization)
 
 <hr>
 
