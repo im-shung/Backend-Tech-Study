@@ -634,3 +634,117 @@ SELECT * From db_table [GROUP BY {col_name | expr | position}, ... [WITH ROLLUP]
 - [MySQL 8.0 Reference Manual - 13.2.13 SELECT Statement](https://dev.mysql.com/doc/refman/8.0/en/select.html)
 
 <hr>
+
+# JOIN
+## JOIN이란
+- 데이터베이스에서 데이터는 다수의 테이블에 나뉘어 저장되어 있다. 데이터의 중복을 제거하고 무결성을 보장하기 위해서이다. 
+    ```
+    데이터 무결성은 컴퓨팅 분야에서 완전한 수명 주기를 거치며 데이터의 정확성과 일관성을 유지하고 보증하는 것을 가리키며 데이터베이스나 RDBMS 시스템의 중요한 기능이다.
+    ```
+- 테이블별로 분리되어 있는 데이터를 연결하여 마치 하나의 테이블인 것처럼 활용하는 것이다.
+- 테이블을 연결하려면 적어도 하나의 칼럼은 서로 공유되고 있어야 한다. 조인 키 칼럼이라고 한다. 보통 Primary Key나 Foreign Key로 테이블을 연결한다. 
+
+## JOIN 종류
+
+데이터 집합 A, B의 집합 연산에 따른 JOIN 종류
+<img src="../imgs/db-sqljoins.png">
+
+### 1. INNER JOIN
+
+<img src="../imgs/db-innerjoin.png">
+
+```SQL
+SELECT *
+   FROM TABLE_1 A
+        INNER JOIN TABLE_2 B
+     ON (A.COL1     = B.COL1
+         AND A.COL2 = B.COL2)    
+```
+
+```SQL
+SELECT * 
+  FROM Orders 
+      INNER JOIN Customers 
+    ON Orders.CustomerID = Customers CustomerID;
+```
+
+- `INNER JOIN`은 교집합( A ∩ B ) 연산과 같다.
+- JOIN KEY 칼럼의 값이 테이블 A, B에 <strong>모두 공통적으로 존재</strong>하는 경우에만 데이터 조인 
+- `INNER` 키워드는 생략이 가능하다.
+
+### 2. LEFT OUTER JOIN
+
+<img src="../imgs/db-leftouterjoin.png">
+
+```SQL
+SELECT *
+   FROM TABLE_1 A
+        LEFT OUTER JOIN TABLE_2 B
+     ON (A.COL1     = B.COL1
+         AND A.COL2 = B.COL2)    
+```
+
+```SQL
+SELECT * 
+  FROM Orders 
+      LEFT JOIN Customers 
+    ON Orders.CustomerID = Customers.CustomerID;
+```
+
+- `LEFT OUTER JOIN`은 교집합 연산 결과와 차집합 연산 결과를 합친 것 ( (A ∩ B) ∪ (A - B) )와 같다.
+- JOIN KEY 칼럼의 값이 테이블 A, B에 모두 공통적으로 존재하는 데이터와 + 기준 테이블(그림에서는 A)의 데이터를 조인한다. 
+- `OUTER` 키워드는 생략 가능하다.
+
+### 3. RIGHT OUTER JOIN
+
+<img src="../imgs/db-rightouterjoin.png">
+
+```SQL
+SELECT *
+   FROM TABLE_1 A
+        RIGHT OUTER JOIN TABLE_2 B
+     ON (A.COL1     = B.COL1
+         AND A.COL2 = B.COL2)    
+```
+
+```SQL
+SELECT * 
+  FROM Orders 
+      RIGHT JOIN Customers 
+    ON Orders.CustomerID = Customers.CustomerID;
+```
+
+- `RIGHT OUTER JOIN`은 `LEFT OUTER JOIN` 와 유사하다. 기준 테이블이 반대일 뿐이다.
+- JOIN KEY 칼럼의 값이 테이블 A, B에 모두 공통적으로 존재하는 데이터와 + 기준 테이블(그림에서는 B)의 데이터를 조인한다. 
+- `OUTER` 키워드는 생략 가능하다.
+
+### 4. FULL OUTER JOIN
+
+<img src="../imgs/db-fullouterjoin.png">
+
+```SQL
+SELECT *
+   FROM TABLE_1 A
+        FULL OUTER JOIN TABLE_2 B
+     ON (A.COL1     = B.COL1
+         AND A.COL2 = B.COL2)
+```
+
+```SQL
+SELECT * 
+  FROM Orders 
+      FULL JOIN Customers 
+    ON Orders.CustomerID = Customers.CustomerID;
+```
+
+- `FULL OUTER JOIN`은 합집합 연산 결과와 같다.
+- JOIN KEY 칼럼의 값이 테이블 A, B에 모두 공통적으로 존재하는 데이터 + 한쪽 테이블에 존재하는 데이터를 조인한다.
+
+<hr>
+
+출처
+- [테이블 조인 종류(Table Join Type)](https://sparkdia.tistory.com/17)
+- [SQL - JOIN문, JOIN 종류 (Inner Join,Natural Join,Outer Join,Cross Join)](https://doh-an.tistory.com/30)
+- [JOIN 종류와 사용법](https://theplace.tistory.com/m/24)
+
+<hr>
