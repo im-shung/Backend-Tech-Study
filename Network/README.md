@@ -244,3 +244,38 @@ Socket.IO는 Websocket을 사용하지만, 각 패킷에 추가적인 메타데�
 
 출처
 - [What is MAC Address?](https://www.javatpoint.com/what-is-mac-address)
+
+# SOP (Same-origin policy)
+## SOP(Same-origin policy)란
+- 한 Origin에서 로드된 문서 또는 스크립트가 다른 Origin의 리소스와 상호작용할 수 있는 방법을 제한하는 중요한 보안 메커니즘이다. 보안을 위협하는 문서를 격리하여, 보안 위협으로부터 보호할 수 있다.
+  - Origin은 출처(URL)을 말한다.
+- 악의적인 웹 사이트가 타 웹 메일 서비스나 회사 인트라넷에 접근해 데이터를 읽고 해커에게 데이터를 전달하는 것을 막는다.
+
+## Origin(출처)의 정의
+- 두 개의 URL이 동일한 `protocol`, `port`, `host` 를 가지고 있으면 같은 Origin이다.
+- `http://store.company.com/dir/page.html` 에 대한 예시다. 
+  <img src="../imgs/network-origin.png">
+
+## Cross-origin network access
+- SOP 정책은 `XMLHttpRequest` 또는 `<img>` 요소를 사용할 때와 같이 두 개의 Origins 간의 상호작용을 제어한다. 이러한 상호작용들은 일반적으로 세 가지 범주로 분류된다.
+- `Cross-origin writes`는 일반적으로 허용된다. 예를 들어 links, redirects, form submissions가 있다. 일부 HTTP 요청에는 preflight가 필요하다.
+- `Cross-origin embedding`은 일반적으로 허용된다. 
+- `Cross-origin reads`는 일반적으로 허용되지 않지만, 읽기 접근은 embedding에 의해 유출되는 경우가 많다. 예를 들어 embedded 이미지의 치수, embedded 스크립트의 작업, embedded 리소스의 가용성을 읽을 수 있다.
+  
+
+### `Cross-origin embedding`의 예시
+- `<script src="…"></script>`이 포함된 JavaScript. syntax error에 대한 내용은 Same-origin 스크립트에서만 사용할 수 있다.
+- `<link rel="stylesheet" href=..">`와 함께 적용된 CSS. 올바른 Content-Type 헤더가 필요하다. 브라우저는 MIME 타입이 올바르지 않고 유효한 CSS 구성으로 시작하지 않는 cross-origin은 style sheet 로드를 block한다. 
+- `<img>`에 의해 로드된 이미지.
+- `<video>`와 `<audio>`로 로드된 미디어.
+
+### Cross-origin access 허용하는 방법
+- [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)를 사용해서 허용한다. CORS는 서버가 브라우저가 컨텐츠 로드를 허용해야 하는 host드들을 지정할 수 있게 해주는 HTTP의 한 부분이다.
+
+<hr>
+
+출처
+- [](https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy#cross-origin_script_api_access)
+
+<hr>
+
