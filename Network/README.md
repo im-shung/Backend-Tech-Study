@@ -275,7 +275,33 @@ Socket.IO는 Websocket을 사용하지만, 각 패킷에 추가적인 메타데�
 <hr>
 
 출처
-- [](https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy#cross-origin_script_api_access)
+- [Same-origin policy](https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy#cross-origin_script_api_access)
 
 <hr>
 
+# Stateless와 Connectionless
+## Stateless(무상태)
+- stateful은 서버가 클라이언트의 이전 상태를 보존한다는 의미다. 반대로 Stateless는 서버가 클라이언트의 이전 상태를 보존하지 않다는 의미다. 
+- stateful의 경우 항상 같은 서버가 유지되어야 하지만 stateless는 상태를 보관하지 않기 때문에 클라이언트의 요청에 어느 서버가 응답해도 상관이 없다. 따라서 클라이언트의 요청이 대폭 증가해도 서버를 증설해 해결할 수 있다.
+- 하지만 모든 것을 stateless로 설계할 수 없다. 단순히 로그인만 보더라도 사용자가 로그인한 상태를 서버가 유지시켜 주어야 한다. 이를 브라우저 쿠키나 서버 세션 등을 사용해 상태를 유지한다.
+
+## Connectionless(비연결성)
+- connectionless는 클라이언트가 서버에 요청을 하고 응답을 받으면 바로 TCP/IP connection을 끊어 연결을 유지하지 않는 것이다. 
+- 서버의 자원을 효율적으로 관리하고, 수많은 클라이언트의 요청에 대응할 수 있게 해준다.
+- HTTP는 connectionless 모델을 기본으로 한다. 
+
+### Connectionless의 한계
+- 연결이 끊어지고 새로 연결될 때 마다 TCP/IP 연결을 위한 3-way handshake의 시간 비용이 추가된다. 
+- HTML 뿐만 아니라 JavaScript, CSS, 이미지 등 수많은 자원이 함께 다운로드된다. 이는 HTML을 받기 위해 연결하고 종류, JavaScript 파일을 받기 위해 연결 및 종료가 이어진다. 
+
+### 해결
+- HTTP 1.X 시대에는 HTTP 지속 연결(HTTP Persistent Connection)으로 문제를 해결했다. 
+- 지속 연결은 요청에 따라 연결된 이후 일정 시간 연결을 유지하거나 여러 개의 요청(HTML, JavaScript, 이미지 등)에 대한 응답이 다 올 때까지 기다린 후 연결을 종료하는 것이다. 
+- HTTP/2 버전은 멀티플렉싱(Multiplexing) 기능으로 단일 TCP 연결을 통해 (Persistent Connection in HTTP1.X), 다수의 HTTP 요청과 응답(HTTP Pipelining in HTTP1.1)이 클라이언트와 서버 사이에 응답 지연(HOL, Header of Line Blocking) 없이 Stream 형태로 주고 받을 수 있는 기술적 토대를 만들게 되었다. 따라서 HTTP/2 버전을 사용한다면 Persisten Connection에 대해 더 이상 고민할 필요가 없어졌다. 
+
+<hr>
+
+출처
+- [HTTP, Stateless, Connectionless, HTTP 메시지 개념](https://velog.io/@duarufp06/HTTP-Stateless-Connectionless-HTTP-%EB%A9%94%EC%8B%9C%EC%A7%80-%EA%B0%9C%EB%85%90)
+- [HTTP Persistent Connection](https://brunch.co.kr/@sangjinkang/4)
+- [(번역) HTTP/3 - 차세대 웹 프로토콜에 대해 알아야하는 모든 것](https://velog.io/@sehyunny/everthing-you-need-to-know-about-http3)
