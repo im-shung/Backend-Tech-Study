@@ -415,3 +415,39 @@ Socket.IO는 Websocket을 사용하지만, 각 패킷에 추가적인 메타데�
 출처
 - [gateway](https://www.techtarget.com/iotagenda/definition/gateway)
 - [네트워크 항해의 첫 관문 - 게이트웨이(Gateway)](https://it.donga.com/6744/)
+
+<hr>
+
+# 다중화(Multiplexing, MUX)과 역다중화(Demultiplexing, DeMUX)
+- 컴퓨터 네트워크에서 대부분 모든 프로토콜 아키텍처는 다중화와 역다중화를 사용한다. 
+- 전송 계층 프로토콜에서의 다중화 및 역다중화, 즉 TCP 및 UDP는 출발지 포트 번호 필드와 도착지 포트 번호 필드를 헤더에 추가해 수행된다.
+## 다중화(MUX, Multiplexing)란
+- 다중화의 주요 목적은 `n`개의 입력 라인 중 하나를 출력 라인으로 전송하는 것이다. 
+- 즉 송신자의 여러 개의 서로 다른 애플리케이션의 프로세스로부터 데이터를 수집하고, 그 데이터를 헤더로 감싸서, 수신자에게 전체를 전송하는 것을 다중화라고 한다.
+  - 헤더: 송신자 IP 주소, 수신자 IP 주소, 송신자 Port 번호, 수신자 Port 번호
+- 애플리케이션 계층에서 패킷이 소켓에 의해 전송 계층으로 전달될 때, 전송 계층에서는 여러 개의 소켓의 패킷을 수집하여 하나의 세그먼트에 캡슐화하여 네트워크 계층으로 전달된다. 
+- 송신자 측의 애플리케이션에서 수신자 측의 애플리케이션으로 데이터를 보내려면, 송신자가 수신자의 IP 주소와 애플리케이션의 Port 번호를 알아야 데이터를 전송할 수 있다.
+
+## 역다중화(Demultiplexing, DeMUX)
+- 수신자 측에서 수신된 세그먼트를 올바른 애플리케이션 계층의 프로세스로 전달하는 것을 말한다. 
+
+### Connectionless DeMUX
+- Ex. UDP
+- 송신자 IP 주소나 송신자 Port 번호가 달라도 수신자 IP 주소와 수신자 Port 번호만 같으면 같이 전달된다.
+
+### Connection-oriented DeMUX
+- Ex. TCP
+- 웹 서버는 많은 TCP 소켓을 동시에 지원한다. 각 연결된 클라이언트는 서로 다른 소켓을 갖는다.
+- TCP 소켓은 4개의 요소로 구성된 집합에 의해 식별된다.
+  - 송신자 IP 주소
+  - 수신자 IP 주소
+  - 송신자 Port 번호
+  - 수신자 Port 번호로
+
+<hr>
+
+출처
+- [Multiplexing and Demultiplexing in Transport Layer](https://www.geeksforgeeks.org/multiplexing-and-demultiplexing-in-transport-layer/)
+- [Transport Layer 서비스 개요, 다중화와 역다중화, UDP](https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=kostry&logNo=220903948846)
+
+<hr>
