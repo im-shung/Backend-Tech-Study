@@ -867,12 +867,7 @@ SELECT *
 
 ## 특징
 - **데이터 사전(Data Dictionary)** 에 저장된다.
-  ```
-  데이터 사전(Data Dictionary)
-  데이터베이스 자원을 효율적으로 관리하기 위한 다양한 정보를 저장하는 시스템 테이블이다. 
-  
-  데이터 딕셔너리의 내용은 데이터베이스 안의 모든 객체에 대한 정의로서 객체들에 할당된 공간과 사용된 공간, 무결성 제약 조건, 사용자 정보, 사용자에게 부여된 권한과 역할(ROLE) 정보, 감사 정보 등 다양한 정보를 알려준다.
-  ```
+  > 데이터 사전(Data Dictionary): 데이터베이스 자원을 효율적으로 관리하기 위한 다양한 정보를 저장하는 시스템 테이블이다. 데이터 딕셔너리의 내용은 데이터베이스 안의 모든 객체에 대한 정의로서 객체들에 할당된 공간과 사용된 공간, 무결성 제약 조건, 사용자 정보, 사용자에게 부여된 권한과 역할(ROLE) 정보, 감사 정보 등 다양한 정보를 알려준다.
 - 현실세계의 특정한 한 부분의 표현으로써 **특정 데이터 모델**을 이용하여 만들어진다.
 - 시간에 따라 불변인 특성을 갖는다.
 - 데이터의 구조적 특성을 의미하며, 인스턴스에 의해 규정된다.
@@ -898,11 +893,9 @@ SELECT *
 
 ### 2. 개념 스키마 (Conceptual Schema) = 전체적인 뷰(View)
 - 데이터베이스의 전체 조직에 대한 논리적인 구조로, 물리적인 구현은 고려하지 않는다.
-- 모든 응용시스템과 사용자가 필요로 하는 데이터를 통합한 조직 전체의 데이터베이스로 하나만 존재한다.
-- 개체 간의 관계(Relation) 및 무결성 제약 조건에 대한 명세를 정의한다.
-  ```
-  무결성 제약 조건: 데이터베이스의 정확성, 일관성을 보장하기 위해 저장, 삭제, 수정 등을 제약하기 위한 조건
-  ```
+- **모든 응용시스템과 사용자가 필요로 하는 데이터를 통합한 조직 전체의 데이터베이스로 하나만 존재한다.**
+- **개체 간의 관계(Relation)** 및 **무결성 제약 조건**에 대한 **명세**를 정의한다.
+  > 무결성 제약 조건: 데이터베이스의 정확성, 일관성을 보장하기 위해 저장, 삭제, 수정 등을 제약하기 위한 조건
 - 일반적으로 이야기하는 '스키마'가 개념스키마다.
 
 
@@ -920,3 +913,62 @@ SELECT *
 - [스키마(Schema)란?](https://iingang.github.io/posts/DB-schema/)
 
 <HR>
+
+# DBCP (Database Connection Pool)
+## DBCP 등장 배경
+### 웹 어플리케이션을 지탱하는 WAS에서 DB 서버에 접근을 시작하고 데이터를 가져오기까지의 단계에서 가장 비용이 많이 드는 부분이 어디일까?
+
+```java
+String driverPath = "net.sourceforge.jtds.jdbc.Driver";
+String address = "jdbc:jtds:sqlserver://IP/DB";
+String userName = "user";
+String password = "password";
+String query = "SELECT ... where id = ?";
+try {
+  Class.forName(driverPath);
+  Connection connection = DriverManager.getConnection(address, userName, password);
+  PreparedStatement ps = con.prepareStatement(query);
+  ps.setString(1, id);
+  ResultSet rs = get.executeQuery();
+  // ....
+} catch (Exception e) { }
+} finally {
+  rs.close();
+  ps.close();
+}
+```
+1. DB 서버 접속을 위해 JDBC 드라이버를 로드한다.
+2. DB 접속 정보와 `DriverManager.getConnection()`을 통해 `DB Connection` 객체를 얻는다.
+3. `Connection` 객체로부터 쿼리를 수행하기 위한 `PreparedStatement` 객체를 받는다.
+4. `executeQuery` 를수행하여 그 결과로 `ResultSet` 객체를 받아서 데이터를 처리한다.
+5. 처리가 완료되면 처리에 사용된 리소스들을 `close` 하여 반환한다.
+
+위의 예제를 통해서 Database에서 원하는 데이터를 얻어 오기 까지의 과정에서 처리 시간이 0.1초가 소요된다면, 어느 과정에서 비용이 가장 많이 발생할까?
+
+### A. 가장 느린 부분은 웹 서버에서 물리적으로 DB 서버에 최초로 연결되어 `Connection` 객체를 생성하는 부분이다.
+
+## DBCP 목적 
+<img src="../imgs/db-connectionthread.png">
+
+웹 어플리케이션은 HTTP 요청에 따라 Thread를 생성하게 되고 대부분의 비즈니스 로직은 DB 서버로부터 데이터를 얻게 된다. 만약 위와 같이 모든 요청에 대해 `DB 접속을 위한 Driver를 로드하고 Connection 객체를 생성하여 연결한다면` 물리적으로 DB 서버에 지속적으로 접속해야 될 것이다.
+
+이러한 상황에서 DB Connection 객체를 생성하는 부분에 대한 비용과 대기시간을 줄이고, 네트워크 연결에 대한 부담을 줄일 수 있는 방법이 있는데, 바로 DBCP (Database Connection Pool)이다.
+
+## DBCP 란
+DBCP는 HTTP 요청에 매번 위의 `1-5 단계`를 거치지 않기 위한 방법이다. Connection Pool을 이용하면 다수의 HTTP 요청에 대한 Thread를 효율적으로 처리할 수 있다.
+> WAS가 실행될 때 애플리케이션에서는 Connection Pool 라이브러리를 통해 Connection Pool 구현체를 사용할 수 있는데, Apache의 Commons DBCP가 오픈소스 라이브러리로 제공되고 있다.
+> 
+> http://commons.apache.org/
+
+### Connection Pool 구현체의 역할
+1. WAS가 실행되면서 미리 일정량의 DB Connection 객체를 생성하고 ***Pool*** 이라는 공간에 저장해 둔다.
+2. HTTP 요청에 따라 필요할 때 Pool에서 Connection 객체를 가져다 쓰고 반환한다.
+3. 이와 같은 방식으로 HTTP 요청 마다 DB Driver를 로드하고 물리적인 연결에 의한 Connection 객체를 생성하는 비용이 줄어들게 된다.
+   <img src="../imgs/db-connectionpool.gif">
+
+<hr>
+
+출처
+- [DB Connection Pool에 대한 이야기](https://www.holaxprogramming.com/2013/01/10/devops-how-to-manage-dbcp/)
+
+<hr>
