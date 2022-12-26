@@ -1108,5 +1108,5 @@ API Gateway는 API 호출을 라우팅할 수 있다. 같은 API라도 사용하
 
 - [Framing In Data Link Layer](https://www.scaler.com/topics/framing-in-data-link-layer/)
 - [[10분 테코톡] 🔮 히히의 OSI 7 Layer](https://youtu.be/1pfTxp25MA8)
-- [](https://abangpa1ace.tistory.com/147)
-- [](https://devowen.com/344)
+- [OSI 7계층 vs TCP/IP 4계층](https://abangpa1ace.tistory.com/147)
+- [OSI 7계층, TCP/IP 4계층 모델](https://devowen.com/344)
