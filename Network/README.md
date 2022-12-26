@@ -1012,3 +1012,101 @@ API Gateway는 API 호출을 라우팅할 수 있다. 같은 API라도 사용하
 
 
 <hr>
+
+# OSI 7계층 vs TCP/IP 4계층
+## OSI 7계층 
+- OSI는 Open System Interconnection의 약자이다.
+- 국제표준화기구인 ISO에서 개발한 모델이다.
+- 네트워크 프로토콜 디자인과 데이터 통신을 계층으로 나누어 표준화한 것이다.
+- 이렇게 계층을 나눈 이유는, 통신이 일어나는 과정을 단계별로 서술할 수 있으며 특정 계층에서 문제가 발생할 경우 해당 계층만 핸들하면 되기 때문이다.
+- 예를 들어 사용자가 이메일을 보낸다고 했을 때, 처음 Applicatiion 계층에서 헤더를 붙여 하위 계층으로 내려준다. Presentatiion 계층은 Applicatiion 계층이 내려준 **헤더와 데이터를 하나로 간주하고 자신의 헤더를 붙인다. 이를 Encapsulation**이라 한다. 이런식으로 Physical 계층까지 내려온다.
+- 반대로 수신자는 거꾸로 Physical 계층에서 시작해서 **헤더의 정보를 확인 후 헤더를 떼어낸 데이터를 상위 계층으로 올린다. 이 과정을 Decapsulation** 이라 한다.
+
+<img src="../imgs/network-osi7layer.png">
+
+### [1] Physical Layer (물리 계층)
+- 0과 1의 나열을 아날로그 신호로 바꾸어 전선으로 흘려보내고, (encoding)
+- 아날로그 신호가 들어오면 0과 1의 나열로 해석하여 (decoding)
+- 물리적으로 연결된 두 대의 컴퓨터가 0과 1의 나열을 주고 받을 수 있게 해주는 모듈이다.
+- 기술은 PHY 칩에 하드웨어적으로 구현되어 있다. (하드웨어 또한 input을 받고 output를 만들어내니까 '-' )
+  > PHY 칩이란 NIC(Network Interface Card, 흔히 랜카드라고 부름)에서 mac만 뺀 것
+
+### [2] DataLink Layer (데이터 링크 계층)
+- 같은 네트워크에 있는 여러 대의 컴퓨터들이 데이터를 주고 받기 위해서 필요한 모듈
+- MAC Address로 통신한다. 
+- **Framing**: 데이터링크 계층의 함수로, 송신자가 수신자에게 0과 1의 나열을 보낼 때 식별 가능한 데이터 블록으로 프레임하는 것
+  <img src="../imgs/network-osi7layer-3.png">
+- 데이터 단위는 **Frame**
+- 기술은 LAN 카드에 하드웨어적으로 구현되어 있다.
+
+### [3] Network Layer (네트워크 계층)
+- 수많은 네트워크들의 연결로 이루어지는 inter-network 속에서
+- 어딘가에 있는 목적지 컴퓨터로 데이털르 전송하기 위해,
+- IP 주소를 이용해서 길을 찾고 (routing)
+- 자신 다음의 라우터로 데이터를 넘겨주는 것 (forwarding)
+- 데이터 단위는 **Packet**
+- 기술은 운영체제 커널에 소프트웨어적으로 구현되어 있다.
+
+### [4] Transport Layer (전송 계층)
+- Port Number를 사용하여
+- 도착지 컴퓨터의 최종 도착지인 Process에 까지 
+- 데이터가 도착하게 하는 모듈
+- 양 끝단의 사용자들이 신뢰성 있는 데이터를 주고 받을 수 있게 해 주어, 상위 계층들이 데이터 전달의 유효성이나 효율성을 생각하지 않도록 한다. 특정 연결의 유효성을 제어하고, 일부 프로토콜은 상태 개념이 있고 연결 기반이다. 전송 계층의 패킷들이 유효한지 확인하고 전송 실패한 패킷을 다시 전송함을 의미한다.
+- 데이터 단위는 **Segment(TCP), Datagram(UDP)**
+- 기술은 운영체제 커널에 소프트웨어적으로 구현되어 있다.
+
+### [5] Session Layer (세션 계층)
+- 네트워크 상에서 데이터가 통신하기 위한 논리적인 연결을 한다.
+- 이를 위해 세션 설정, 유지, 전송 중단 시 복구 등의 기능이 있다. 
+  > 세션: 통신장치 간의 반영구적 연결상태 다이얼로그
+- TCP/IP 세션을 만들고 제거하는 책임이 있다.
+
+### [6] Presentation Layer (표현 계층)
+- 데이터 표현을 결정하는 계층이다. 크게 3가지 기능을 한다.
+- 1. 송신자에서 온 데이터를 해석하기 위한 Application Layer 데이터 부호화, 변화
+- 2. 수신자에서 데이터의 압축을 풀 수 있는 방식으로 된 데이터 압축
+- 3. 데이터의 암호화, 복호화
+- MMIE 인코딩이나 암호화 등 데이터 표현 차이를 구현하며, 이는 상위 계층인 Application Layer에서 데이터 구분을 용이하게 한다.
+- EBCDIC 인코딩 파일이 ASCII 인코딩 파일로 변경되거나, 데이터가 텍스트인지, 그림인지(GIF, JPG 등) 구분하는 사례가 해당된다.
+
+### [7] Application Layer (응용 계층)
+- 최종 목적지로, 어플리케이션 서비스나 프로세스가 동작하는 계층
+- 사용자를 위한 UI, 입출력 등을 담당한다.
+
+
+## TCP/IP 4계층
+- OSI 7계층이 네트워크 전송의 데이터 표준을 정립했다면, TCP/IP 4계층은 이를 실제로 사용하는 인터넷 표준이다. 
+- TCP/IP는 2개의 계층으로 이루어진 프로그램이다. **상위 계층인 TCP는 메시지나 파일들을 좀 더 작은 패킷으로 나누어 인터넷을 통해 전송하는 일과 수신된 패킷들을 원래의 메시지로 재조립하는 일을 담당한다. 반면 하위 계층인 IP는 각 패킷의 주소 부분을 처리하며 패킷들이 목적지에 정확하게 도달할 수 있게 한다.**
+
+<img src="../imgs/network-osi7layer-4.png">
+
+### [1] Network Access Layer (네트워크 액세스 계층)
+- OSI 계층의 1,2 계층에 해당된다.
+- TCP/IP 패킷을 네트워크 매체로 송수신하는 과정을 담당한다.
+- 데이터 단위는 frame
+- 전송 주소는 Mac Address 참조 
+- error 검출 기능과 Packet들의 framing을 수행한다.
+
+### [2] Internet Layer (인터넷 계층)
+- OSI 계층의 3 계층에 해당된다.
+- addressing, packaging, routing 기능을 제공한다.
+- 데이터 단위는 packet
+- 전송 주소는 IP 주소 참조
+
+### [3] Transport Layer (전송 계층)
+- OSI 계층의 4 계층에 해당된다.
+- 통신 노드 간의 연결 제어, 자료 송수신을 담당한다.
+- 데이터 단위는 segment
+- 전송 주소는 Port Number 참조
+
+### [4] Application Layer (응용 계층)
+- OSI 계층의 5,6,7 계층에 해당된다.
+- 데이터 단위는 data/message
+
+
+<hr>
+
+- [Framing In Data Link Layer](https://www.scaler.com/topics/framing-in-data-link-layer/)
+- [[10분 테코톡] 🔮 히히의 OSI 7 Layer](https://youtu.be/1pfTxp25MA8)
+- [](https://abangpa1ace.tistory.com/147)
+- [](https://devowen.com/344)
