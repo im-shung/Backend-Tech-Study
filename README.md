@@ -47,7 +47,7 @@ CS 공부
 -  [라우터 내의 패킷 포워딩 (Packet Forwarding in Router)](https://github.com/im-shung/CS-Study/blob/main/Network/README.md#라우터-내의-패킷-포워딩-packet-forwarding-in-router)
 -  [서브넷 마스크(Subnet Mask)](https://github.com/im-shung/CS-Study/blob/main/Network/README.md#서브넷-마스크subnet-mask)
 -  [게이트웨이 (Gateway)](https://github.com/im-shung/CS-Study/blob/main/Network/README.md#게이트웨이-gateway)
--  다중화(Multiplexing, MUX)과 역다중화(Demultiplexing, DeMUX)[](https://github.com/im-shung/CS-Study/blob/main/Network/README.md#다중화multiplexing-mux과-역다중화demultiplexing-demux)
+-  [다중화(Multiplexing, MUX)과 역다중화(Demultiplexing, DeMUX)](https://github.com/im-shung/CS-Study/blob/main/Network/README.md#다중화multiplexing-mux과-역다중화demultiplexing-demux)
 -  [크로스 사이트 스크립팅(Cross Site Scripting, XSS)](https://github.com/im-shung/CS-Study/blob/main/Network/README.md#크로스-사이트-스크립팅cross-site-scripting-xss)
 -  [DHCP (Dynamic Host Configuration Protocol)](https://github.com/im-shung/CS-Study/blob/main/Network/README.md#dhcp-dynamic-host-configuration-protocol)
 -  [HTTP (Hyper Text Transfer Protocol)](https://github.com/im-shung/CS-Study/blob/main/Network/README.md#http-hyper-text-transfer-protocol)
