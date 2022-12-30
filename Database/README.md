@@ -1103,3 +1103,16 @@ Clustering은 DB 스토리지를 1대만 사용하기 때문에 DB 스토리지 
 - [PostgreSQL과 MySQL 비교: 주요 차이점](https://www.integrate.io/ko/blog/postgresql-vs-mysql-the-critical-differences-ko/)
 
 <HR>
+
+# 쿼리의 성능을 확인하기 위해 어떤 쿼리문을 작성해야 할까요?
+##  `EXPLAIN ANALYZE`  명령
+- MySQL 8.0.18 버전부터는 쿼리의 실행 계획과 단계별 소요된 시간 정보를 확인할 수 있는 `EXPLAIN ANALYZE` 기능이 추가됐다. 
+- 물론 `SHOW PROFILE ` 명령으로 어떤 부분에서 시간이 많이 소요되는지 확인할 수 있지만  `SHOW PROFILE ` 명령의 결과는 실행 계획의 단계별로 소요된 시간 정보를 보여주지 않는다.'
+- `EXPLAIN ANALYZE`  명령의 결과에는 단계별로 실제 소요된 시간(actual time)과 처리한 레코드 건수(rows), 반복 횟수(loops)가 표시된다. 
+
+<hr>
+
+출처
+- Real MySQL 8.0 책 
+
+<HR>
