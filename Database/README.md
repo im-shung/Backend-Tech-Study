@@ -1087,3 +1087,19 @@ Clustering은 DB 스토리지를 1대만 사용하기 때문에 DB 스토리지 
 - [DB Replication을 구성한 이유](https://2021-pick-git.github.io/why-db-replication-is-set-up/)
 
 <HR>
+
+# PostgreSQL
+## 장점
+- **단순히 RDBMS가 아닌 ORDBMS**: 객체지향 데이터베이스 시스템과 관계형 데이터베이스 시스템을 기반으로하며 복잡한 객체가 중심 역할을 하는 DBMS이다. ORBMS는 엄격한 관계형 모델에 맞지 않는 데이터를 처리할 때 탁월하다.
+- **복잡한 쿼리**: 복잡한 읽기-쓰기 작업에 좋다. 다만 읽기가 많은 경우 다른 DB보다 성능이 떨어진다.
+- **NoSQL 및 다양한 데이터 형식 지원**: JSON, XML 등 다양한 데이터 형식을 지원한다. 
+- **초대형 데이터베이스 관리용으로 설계**: 데이터베이스의 크기에 제한을 두지 않는다. 
+- **다중 버전 동시성 제어(MVCC)**: 사용자는 갱신/변경된 데이터를 다른 그 이전 데이터와 버전을 달리해 관리하고, 이를 기반으로 일관성을 유지한다. 따라서 데이터와 통신해야 할 때마다 읽기-쓰기 잠금을 할 필요가 없으므로 효율성이 향상한다.
+- **ACID 준수**
+
+<HR>
+
+출처
+- [PostgreSQL과 MySQL 비교: 주요 차이점](https://www.integrate.io/ko/blog/postgresql-vs-mysql-the-critical-differences-ko/)
+
+<HR>
