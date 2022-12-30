@@ -1,5 +1,5 @@
 # CS-Study
-CS 공부
+CS 스터디를 하면서 공부한 내용을 기록합니다.
 
 ## [데이터베이스](https://github.com/im-shung/CS-Study/blob/main/Database/README.md)
 -  [Statement와 PreparedStatement이란](https://github.com/im-shung/CS-Study/blob/main/Database/README.md#statement와-preparedstatement이란)
@@ -24,6 +24,8 @@ CS 공부
 -  [쿼리의 성능을 확인하기 위해 어떤 쿼리문을 작성해야 할까요?](https://github.com/im-shung/CS-Study/blob/main/Database/README.md#쿼리의-성능을-확인하기-위해-어떤-쿼리문을-작성해야-할까요)
 -  [인덱스(Index)](https://github.com/im-shung/CS-Study/blob/main/Database/README.md#인덱스index)
 -  [Elasticsearch](https://github.com/im-shung/CS-Study/blob/main/Database/README.md#elasticsearch)
+-  [트랜잭션, 잠금, 트랜잭션의 격리 수준](https://github.com/im-shung/CS-Study/blob/main/Database/README.md#트랜잭션-잠금-트랜잭션의-격리-수준)
+-  [트랜잭션의 격리 수준](https://github.com/im-shung/CS-Study/blob/main/Database/README.md#트랜잭션의-격리-수준)
 ## [운영체제](https://github.com/im-shung/CS-Study/blob/main/OS/README.md)
 -  [프로세스](https://github.com/im-shung/CS-Study/blob/main/OS/README.md#프로세스)
 -  [커널의 프로세스 관리](https://github.com/im-shung/CS-Study/blob/main/OS/README.md#커널의-프로세스-관리)
