@@ -19,7 +19,7 @@ CS 공부
 -  [스키마(Schema)](https://github.com/im-shung/CS-Study/blob/main/Database/README.md#스키마schema)
 -  [DBCP (Database Connection Pool)](https://github.com/im-shung/CS-Study/blob/main/Database/README.md#dbcp-database-connection-pool)
 -  [테이블의 데이터를 읽는 방식: Table Full Scan, Index Range Scan](https://github.com/im-shung/CS-Study/blob/main/Database/README.md#테이블의-데이터를-읽는-방식-table-full-scan-index-range-scan)
--  [Clustering & Replication In RDBMS, NOSQL](https://github.com/im-shung/CS-Study/blob/main/Database/README.md#clustering--replication-in-rdbms-nosql)
+-  [Clustering & Replication](https://github.com/im-shung/CS-Study/blob/main/Database/README.md#clustering--replication)
 -  [](https://github.com/im-shung/CS-Study/blob/main/Database/README.md#)
 -  [](https://github.com/im-shung/CS-Study/blob/main/Database/README.md#)
 ## [운영체제](https://github.com/im-shung/CS-Study/blob/main/OS/README.md)
