@@ -1030,28 +1030,31 @@ SELECT * FROM employees WHERE first_name BETWEEN 'Ebbe' AND 'Gad';
 
 <hr>
 
-# Clustering & Replication In RDBMS, NOSQL
-## Clustering In RDBMS
+# Clustering & Replication
+## Clustering
 - Clustering은 DB 서버를 2대 이상, DB 스토리지를 1대로 구성하는 형태이다. 
 - DB 서버 2대를 모두 Active한 상태로 운영하면, DB 서버 1대가 죽더라도 DB 서버 1대는 살아있어 서비스는 정상적으로 작동한다. 
 - DB 서버를 여러 대로 두면, 트래픽을 분산하여 감당해 CPU와 Memory에 대한 부하가 적어지는 장점이 있다.
 - 그러나 DB 서버들이 DB 스토리지를 공유하기 때문에 DB 스토리지에 병목이 생기는 단점이 있다. 그래서 DB 서버 2대 중 1대를 Stand-by 상태로 두어 단점을 보완할 수 있다. Stand-by 상태의 서버는 Active 상태의 서버에 문제가 생겼을 때, Fail Over를 통해 상호 전환되어 장애에 대응할 수 있다. 이와 같이 구성하면, DB 스토리지에 대한 병목 현상도 해결된다. 그렇지만, Fail Over가 이뤄지는 시간 동안은 영업 손실이 필연적으로 발생한다. 또한 DB 서버 비용은 이전과 동일하나, 가용률은 이전에 비해 대략 1/2로 줄어드는 단점이 있다.
 - Clustering은 DB 스토리지를 1대만 사용하기 때문에 DB 스토리지 단일 장애점이 될 수 있다. DB 스토리지에 문제가 발생하면, 데이터를 복구할 수 없는 치명타가 생긴다.  
 
-## Replication In RDBMS
+> 모든 NoSQL이 그런 건 아니지만 MongoDB나 Redis 처럼 많이 쓰이고 성숙한 NoSQL 제품들은 클러스터링 기능이 자체 탑재되어 있고 여러 클러스터링 전략 중 하나를 간단한 설정만으로 사용할 수 있다. 
+
+## Replication
 - Replication은 각 DB 서버가 각자 DB 스토리지를 갖고 있는 형태이다.
 - 사용자가 Master DB에 Select/Insert/Update/Delete 를 하면, Master DB는 Slave DB에 데이터를 복제한다. 하지만 Master DB만 일을 하고 Slave DB는 놀게 되는 상황이 발생한다. 그래서 Master DB에 Insert/Update/Delete를 하고, Slave DB에 Select를 하는 방식으로 각각 DB에 트래픽을 분산할 수 있다.
 - Replication을 사용한다고 좋은 점만 있는 것은 아니다. 각각의 서로 다른 서버로 운영하다보니 버전을 관리해야한다. 이때 Master와 Slave의 데이터베이스 버전을 동일하게 맞춰주는 것이 좋다. 버전이 다를 경우 적어도 Slave 서버가 상위 버전이어야 한다.
 - 또 한가지 단점으로는 Master에서 Slave로 비동기 방식으로 데이터를 동기화하기 때문에 일관성 있는 데이터를 얻지 못할 수도 있다. 동기화 방식으로 Replication 할 수 있지만 이럴 경우 속도가 느려진다는 문제점이 있다. 
 - 마지막으로 Master 서버가 다운이 될 경우 복구 및 대처가 까다롭다는 단점이 있다.
 
-## Clustering In NOSQL
-- 모든 NoSQL이 그런 건 아니지만 MongoDB나 Redis 처럼 많이 쓰이고 성숙한 NoSQL 제품들은 클러스터링 기능이 자체 탑재되어 있고 여러 클러스터링 전략 중 하나를 간단한 설정만으로 사용할 수 있다. 
+### Heartbeat
+- 노드가 다른 노드가 정상적으로 작동하고 있음을 확인하는 신호이다.
 
-## Replication In NOSQL
 
 <HR>
 
 출처
 - [Replication과 Clustering](https://tecoble.techcourse.co.kr/post/2021-09-18-replication_clustering/)
 - [DB Replication을 구성한 이유](https://2021-pick-git.github.io/why-db-replication-is-set-up/)
+
+<HR>
