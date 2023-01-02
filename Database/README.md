@@ -1139,18 +1139,29 @@ Clustering은 DB 스토리지를 1대만 사용하기 때문에 DB 스토리지 
 <HR>
 
 # PostgreSQL
-## 장점
+## 특징
+- **ACID 및 트랜잭션 지원**
+- **유연한 Full-text search 기능**
+- **NoSQL 및 다양한 데이터 유형 지원**
+  - 기본 요소: 정수, 숫자, 문자열, 부울
+  - 구조화: 날짜/시간, 배열, 범위/다중 범위, UUID
+  - 문서: JSON/JSONB, XML, 키-값(Hstore)
+  - 기하학: 점, 선, 원, 다각형
+  - 사용자 정의: 복합, 사용자 정의 유형
 - **단순히 RDBMS가 아닌 ORDBMS**: 객체지향 데이터베이스 시스템과 관계형 데이터베이스 시스템을 기반으로하며 복잡한 객체가 중심 역할을 하는 DBMS이다. ORBMS는 엄격한 관계형 모델에 맞지 않는 데이터를 처리할 때 탁월하다.
+  - 테이블 상속, 함수 오버로딩 등의 기능
 - **복잡한 쿼리**: 복잡한 읽기-쓰기 작업에 좋다. 다만 읽기가 많은 경우 다른 DB보다 성능이 떨어진다.
-- **NoSQL 및 다양한 데이터 형식 지원**: JSON, XML 등 다양한 데이터 형식을 지원한다. 
 - **초대형 데이터베이스 관리용으로 설계**: 데이터베이스의 크기에 제한을 두지 않는다. 
 - **다중 버전 동시성 제어(MVCC)**: 사용자는 갱신/변경된 데이터를 다른 그 이전 데이터와 버전을 달리해 관리하고, 이를 기반으로 일관성을 유지한다. 따라서 데이터와 통신해야 할 때마다 읽기-쓰기 잠금을 할 필요가 없으므로 효율성이 향상한다.
-- **ACID 준수**
+  - 기존 데이터는 삭제 표시, 더 이상 필요하지 않을 때 데이터 정리
 
 <HR>
 
 출처
 - [PostgreSQL과 MySQL 비교: 주요 차이점](https://www.integrate.io/ko/blog/postgresql-vs-mysql-the-critical-differences-ko/)
+- [PostgreSQL이란? 및 설치 방법](https://learning-e.tistory.com/25)
+- [한눈에 살펴보는 PostgreSQL](https://d2.naver.com/helloworld/227936)
+- [MVCC 구조와 이해](https://mozi.tistory.com/561)
 
 <HR>
 
