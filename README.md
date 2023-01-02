@@ -9,6 +9,7 @@ CS 스터디를 하면서 공부한 내용을 기록합니다.
 -  [데이터베이스 튜닝 (Database tuning)](https://github.com/im-shung/CS-Study/blob/main/Database/README.md#데이터베이스-튜닝-database-tuning)
 -  [함수 종속성 (Functional Dependency)](https://github.com/im-shung/CS-Study/blob/main/Database/README.md#함수-종속성-functional-dependency)
 -  [정규화 (Normalization)](https://github.com/im-shung/CS-Study/blob/main/Database/README.md#정규화-normalization)
+-  [이상현상 (Anomaly)](https://github.com/im-shung/CS-Study/blob/main/Database/README.md#이상현상-anomaly)
 -  [역정규화 (Denormalization)](https://github.com/im-shung/CS-Study/blob/main/Database/README.md#역정규화-denormalization)
 -  [MySQL에서 대량의 데이터(500만개 이상)를 Insert해야하는 경우엔 어떻게 해야할까요?](https://github.com/im-shung/CS-Study/blob/main/Database/README.md#mysql에서-대량의-데이터500만개-이상를-insert해야하는-경우엔-어떻게-해야할까요)
 -  [데이터베이스 파티셔닝(Database Partitioning)](https://github.com/im-shung/CS-Study/blob/main/Database/README.md#데이터베이스-파티셔닝database-partitioning)
