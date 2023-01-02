@@ -1031,50 +1031,53 @@ SELECT * FROM employees WHERE first_name BETWEEN 'Ebbe' AND 'Gad';
 <hr>
 
 # Clustering & Replication
-## 일반적인 데이터베이스 구조
-- 일반적인 데이터베이스 구조는 데이터베이스 서버 1개, 스토리지 1개로 구성된다.
-- 이렇게 구성된 데이터베이스는 서버가 제대로 동작하지 않으면 먹통이 될 것이다.
-- 이러한 문제점을 해결하기 위해 가장 먼저 떠오르는 방법은 서버를 하나 더 늘리는 것이다.
-- 이렇게 서버를 하나가 아닌 여러개로 구성하는 것을 Clustering이라 한다.
-## Clustering란
-- 목적: 데이터베이스 서버가 동작하지 않게 되면 전체 서비스가 동작할 수 없는 점을 해결하기 위함
-- Clustering은 DB 서버를 2대 이상, DB 스토리지를 1대로 구성하는 형태이다. 
+일반적인 데이터베이스 구조는 데이터베이스 서버 1개, 스토리지 1개로 구성된다. 이렇게 구성된 데이터베이스는 서버가 제대로 동작하지 않으면 먹통이 될 것이다. 이러한 문제점을 해결하기 위해 가장 먼저 떠오르는 방법은 서버를 하나 더 늘리는 것이다. 이렇게 서버를 여러개로 구성하는 것을 Clustering이라 한다.
+## Clustering
+- Clustering은 데이터베이스 서버를 2대 이상, 스토리지를 1대로 구성하는 형태이다. 
   - 이때 DB 서버는 서로 다른 인스턴스에서 작동한다.
+- 모든 NoSQL이 그런 건 아니지만 MongoDB나 Redis 처럼 많이 쓰이고 성숙한 NoSQL 제품들은  기능이 자체 탑재되어 있고 여러 클러스터링 전략 중 하나를 간단한 설정만으로 사용할 수 있다. 
 
-> 모든 NoSQL이 그런 건 아니지만 MongoDB나 Redis 처럼 많이 쓰이고 성숙한 NoSQL 제품들은 클러스터링 기능이 자체 탑재되어 있고 여러 클러스터링 전략 중 하나를 간단한 설정만으로 사용할 수 있다. 
-
-### Active & Active
-- DB 서버 2대를 모두 `Active`한 상태로 운영하면, DB 서버 1대가 죽더라도 DB 서버 1대는 살아있어 서비스는 정상적으로 작동한다. 
+### Active & Active 
+- DB 서버 2대를 모두 `Active`한 상태로 운영.
+- DB 서버 1대가 죽더라도 DB 서버 1대는 살아있어, 서비스는 정상적으로 작동한다. 
 - 장점
-  - DB 서버를 여러 대로 두면, 트래픽을 분산하여 감당해 CPU와 Memory에 대한 부하가 적어지는 장점이 있다.
+  - 여러 대의 DB 서버로 트래픽을 분산하여, CPU와 Memory에 대한 부하가 적어짐
 - 단점
-  - 그러나 DB 서버들이 DB 스토리지를 공유하기 때문에 DB 스토리지에 병목이 생기는 단점이 있다.
+  - DB 서버들이 DB 스토리지를 공유하여, DB 스토리지에 병목이 생김.
 
-### Active & Stand-By
--  그래서 DB 서버 2대 중 1대를 `Stand-by` 상태로 두어 단점을 보완할 수 있다. 
--  `Stand-By `상태의 서버는 `Active` 상태의 서버에 문제가 생겼을 때, Failover를 통해 상호 전환되어 장애에 대응할 수 있다. 
+### Active & Stand-By 
+- DB 서버 1대는 `Active`, 다른 1대는 `Stand-by` 상태로 운영.
+-  `Stand-By `상태의 서버는 `Active` 상태의 서버에 문제가 생겼을 때, failover 하여 장애에 대응할 수 있다. 
+    > failover: 컴퓨터 서버, 시스템, 네트워크 등에서 이상이 생겼을 때 예비 시스템으로 자동 전환되는 기능
 -  장점
-   -  이와 같이 구성하면, DB 스토리지에 대한 병목 현상도 해결된다.  
+   -  DB 스토리지에 대한 병목 현상 해결
 - 단점
-  - 그렇지만, Failover가 발생하는 시간 동안은 영업 손실이 필연적으로 발생한다.
-  -  또한 DB 서버 비용은 Active & Active과 동일하나, 가용률은 이전에 비해 대략 1/2로 줄어드는 단점이 있다.
+  - failover가 발생하는 시간 동안은 작업 불가
+  -  DB 서버 비용은 Active & Active과 동일하나, 가용률은 이전에 비해 대략 1/2로 줄어든다.
 
 Clustering은 DB 스토리지를 1대만 사용하기 때문에 DB 스토리지 단일 장애점이 될 수 있다. DB 스토리지에 문제가 발생하면, 데이터를 복구할 수 없는 치명타가 생긴다.  그래서 이번에는 스토리지도 여러개 가지는 Replication에 대하여 알아보자.
 
 
-## Replication란
-- Replication은 각 DB 서버가 각자 DB 스토리지를 갖고 있는 형태이다.
-- 서버와 스토리지를 단순히 확장한 것이 아니라 메인으로 사용할 **Master** 서버와 이를 복제한 **Slave** 서버로 구성하게 된다.
+## Replication
+- 두 개 이상의 DBMS 시스템을 Master/Slave로 나눠서 동일한 데이터를 저장하는 방식이다. 각 DB 서버가 각자 DB 스토리지를 갖고 있는 형태.
 - 노드가 다른 노드가 정상적으로 작동하고 있음을 확인하는 신호를 hearbeat라고 한다.
 
 ### Master & Slave
+- Master DB에는 데이터의 수정사항을 반영만 하고 Replication 하여 Slave DB에 실제 데이터를 복사한다.
+-  Master는 쿼리 로그에 해당하는 **바이너리 로그(binary log)** 를 남기는데, 이를 Slave가 비동기적으로(asynchronous) 읽어가서 자신의 데이터베이스에 반영한다. 
 -  장점
-     -  Master DB에 Insert/Update/Delete를 하고, Slave DB에 Select를 하는 방식으로 각각 DB에 트래픽을 분산할 수 있다.
+   -  Master DB에 Insert/Update/Delete를 하고, Slave DB에 Select를 하는 방식으로 각각 DB에 트래픽을 분산할 수 있다.
 - 단점
   -  각각의 서로 다른 서버로 운영하다보니 버전을 관리해야한다. 이때 Master와 Slave의 데이터베이스 버전을 동일하게 맞춰주는 것이 좋다. 버전이 다를 경우 적어도 Slave 서버가 상위 버전이어야 한다.
   -  Master에서 Slave로 비동기 방식으로 데이터를 동기화하기 때문에 일관성 있는 데이터를 얻지 못할 수도 있다. 동기화 방식으로 Replication 할 수 있지만 이럴 경우 속도가 느려진다는 문제점이 있다. 
   - 마지막으로 Master 서버가 다운이 될 경우 복구 및 대처가 까다롭다는 단점이 있다.
 
+### 로그기반 복제(Binary log)
+- **Statement** Based : SQL문장을 복사하여 진행
+  - issue : SQL에 따라 결과가 달라지는 경우(Timestamp, UUID, …)
+- **Row** Based : SQL에 따라 변경된 Row 라인만 기록하는 방식
+  - issue : 데이터가 많이 변경된 경우 데이터 커질 수 밖에 없다.
+- **Mixed** : 기본적으로 Statement Based로 진행하면서 필요에 따라 Row - Based를 사용한다.
 
 ## Clustering vs Replication
 - Clustering은 데이터베이스 서버만을 늘려 처리하는 것이고,
@@ -1085,6 +1088,8 @@ Clustering은 DB 스토리지를 1대만 사용하기 때문에 DB 스토리지 
 출처
 - [Replication과 Clustering](https://tecoble.techcourse.co.kr/post/2021-09-18-replication_clustering/)
 - [DB Replication을 구성한 이유](https://2021-pick-git.github.io/why-db-replication-is-set-up/)
+- [Database의 리플리케이션(Replication)이란?](https://nesoy.github.io/articles/2018-02/Database-Replication)
+- [데이터베이스 REPLICATION](https://www.joinc.co.kr/w/man/12/replication)
 
 <HR>
 
@@ -1343,7 +1348,7 @@ Undo 영역은 하나의 레코드에 대해 백업이 하나 이상 얼마든�
 - `SELECT ... FOR UPDATE` 쿼리는 SELECT하는 레코드에 쓰기 잠금을 걸어야 하는데, Undo 레코드에는 잠금을 걸 수 없다. 
 - 그래서 `SELECT ... FOR UPDATE` 나 `SELECT ... LOCK IN SHARE MODE`로 조회하는 레코드는 Undo 영역의 변경 전 데이터를 가져오는 것이 아니라 현재 레코드의 값을 가져오게 되는 것이다.
 
-## SERIALIZABLE
+## 4. SERIALIZABLE
 - 가장 단순한 격리 수준이면서 동시에 가장 엄격한 격리 수준이다.
 - 그만큼 동시 처리 성능도 다른 트랜잭션 격리 수준보다 떨어진다.
 - InnoDB에서 기본적으로 순수한 `SELECT` 작업은 아무런 레코드 잠금도 설정하지 않고 실행된다
