@@ -379,12 +379,14 @@ DROP [TEMPORARY] TABLE [IF EXISTS]
 <hr>
 
 # 함수 종속성 (Functional Dependency)
-- 함수 종속성은 데이터베이스와 관련된 두 속성 집합 사이의 제약 조건이다.
+- 함수 종속성은 데이터베이스와 관련된 **두 속성 집합 사이의 제약 조건**이다.
 - 일반적으로 테이블 내의 기본 키 속성과 키가 아닌 속성 사이에 존재한다.
 - 함수 종속성은 화살표(→)로 표시된다.
-- 속성 A가 B를 함수적으로 결정하면, `A → B` 로 표시된다.
-  - 예를 들어, `employee_id → employee_name` 은 `employee_id`가 함수적으로 `employee_name`을 결정함을 의미한다. `employee_name`은 함수적으로 `employee_id`에 의존한다.
-- A는 결정 인자(determinant set), B는 종속 인자(dependent set)
+- **A가 B를 함수적으로 결정**하면, `A → B` 로 표시된다.
+- Ex. `employee_id → employee_name` 
+    - `employee_id`가 함수적으로 `employee_name`을 결정.
+    - `employee_name`은 함수적으로 `employee_id`에 의존.
+- A는 **결정 인자(determinant set)**, B는 **종속 인자(dependent set)**
 - `A → B`는 A의 특정 값의 모든 인스턴스에 B의 동일한 값이 있음을 의미한다.
   - 아래 표는 `A → B`는 참이지만 `B → A`는 참이 아니다. `B = 3` 에 대한 A 값이 다르기 때문이다.
     ```
@@ -397,16 +399,20 @@ DROP [TEMPORARY] TABLE [IF EXISTS]
     4   0
     ```
 ## 완전 함수 종속성 (Fully Functional Dependency)
-- 만약 X와 Y가 관계의 속성 집합이라면, Y는 X에 의존한다. 그리고 X의 어떤 적절한 부분 집합에도 의존하지 않는다면, Y는 X에 <strong>완전히</strong> 의존한다.
-- Ex. `ABC → D`의 관계에서, 속성 D는 ABC의 어떤 부분 집합에도 의존하지 않고 ABC에 완전히 의존한다. 다시 말해, AB, BC, A, B 등과 같은 ABC의 부분 집합은 D를 결정할 수 없다.
+- X와 Y는 속성집합
+- Y는 X에 의존한다. 그리고 X의 어떤 적절한 **부분 집합**에도 의존하지 않는다면, **Y는 X에 완전히 의존한다.**
+- Ex. `ABC → D`
+  - D는 ABC의 어떤 부분 집합에도 의존하지 않고 ABC에 완전히 의존한다. 
+  - AB, BC, A, B 등과 같은 ABC의 부분 집합은 D를 결정할 수 없다.
 
 ## 부분 함수 종속성 (Partial Functional Dependency)
-- `X → Y` 는 Y가 X에 함수적으로 종속되어 있고, Y가 X의 부분 집합에 의해 결정되어 있으면 부분 함수 종속성이다.
-- Ex. `AC → B`, `A → D`, `D → B` 의 관계가 있다. 이제 `A → D → B` 로 A는 단독으로 B를 결정할 수 있다. 이는 B가 부분적으로 AC에 의존한다는 것을 의미한다.
+- Y는 X에 의존한다. 그리고 X의 부분 집합에 의존하면, **Y는 X에 부분 함수적으로 의존한다.**
+- Ex. `AC → B`, `A → D`, `D → B` 
+  -  `A → D → B` 로 A는 단독으로 B를 결정할 수 있다. 
+  -  이는 B가 부분적으로 AC에 의존한다는 것을 의미한다.
 
 ## Trivial Functional Dependency
 - 만약 B가 A의 부분 집합인 경우 `A → B`는 trivial 함수 종속성을 갖는다.
-  - Ex. 
     ```
     {Employee_id, Employee_Name} → Employee_Id
     ```
@@ -415,7 +421,6 @@ DROP [TEMPORARY] TABLE [IF EXISTS]
 
 ## Non-trivial Functional Dependency
 - 만약 B가 A의 부분 집합이 아닌 경우 `A → B`는 non-trivial 함수 종속성을 갖는다.
-  - Ex. 
     ```
     ID   →    Name
     Name →    DOB  
@@ -453,9 +458,49 @@ DROP [TEMPORARY] TABLE [IF EXISTS]
 
 <hr>
 
+# 이상현상 (Anomaly)
+## 이상현상이란
+- 테이블 내의 데이터들이 불필요하게 중복되어 테이블을 조작할 때 발생하는 데이터 불일치 현상이다.
+- 테이블을 잘못 설계하여 삽입, 삭제, 갱신할 때 오류가 발생하게 되는 것이다.
+- 이상현상에는 크게 3가지가 있으며, 정규화를 통해 이상현상을 해결할 수 있다.
+  - **삽입 이상**: 원하지 않는 자료가 삽입된다든지, key가 없어 삽입하지 못하는(불필요한 데이터를 추가해야 삽입할 수 있는) 문제점
+  - **갱신 이상**: 일부만 변경하여 데이터가 불일치하는 모순, 또는 중복되는 튜플이 존재하게 되는 문제점
+  - **삭제 이상**: 하나의 자료만 삭제하고 싶지만, 그 자료가 포함된 튜플 전체가 삭제됨으로 원하지 않는 정보 손실이 발생하는 문제점
+
+<img src="../imgs/db-anomaly-1.png">
+
+## 1. 삽입 이상
+- "melon" 이라는 아이디, "성원용"이라는 이름, "gold" 등급을 가진 
+- 신규 고객의 데이터는 이벤트참여 릴레이션에 삽입할 수 없다.
+- 참여하지 않은 임시 이벤트 번호(불필요한 데이터)를 추가해야 삽입할 수 있다.
+
+<img src="../imgs/db-anomaly-2.png">
+
+## 2. 갱신 이상
+- 아이디가 "apple"인 고객의 등급이 "gold"에서 "vip"로 변경되었는데,
+- 일부 튜플에 대해서만 등급이 수정된다면 
+- "apple" 고객이 서로 다른 등급을 가지는 모순이 발생한다. 
+
+<img src="../imgs/db-anomaly-3.png">
+
+## 3. 삭제 이상
+- 아이디가 "orange"인 고객이 이벤트 참여를 취소하여
+- 관련 튜플을 삭제하게 되면,
+- 이벤트와 관련이 없는 고객 아이디, 고객 이름, 등급 데이터까지 손실된다.
+
+<img src="../imgs/db-anomaly-4.png">
+
+<hr>
+
+출처
+- [이상현상, 함수종속, 정규화](https://velog.io/@hjhj4232/6.-%EC%9D%B4%EC%83%81%ED%98%84%EC%83%81%EA%B3%BC-%ED%95%A8%EC%88%98%EC%A2%85%EC%86%8D)
+- [정규화 & 함수 종속성 & 이상현상](https://rebro.kr/159)
+
+<hr>
+
 # 정규화 레벨 
 ## 제 1 정규화 (First Normal Form, 1NF)
-- 각 칼럼은 원자 값을 갖어야 한다.
+- 각 칼럼은 **원자 값**을 갖어야 한다.
   - 원자 값 = 더 이상 논리적으로 분해될 수 없는 값
 - 하나의 컬럼은 같은 종류나 타입(type)을 가져야 한다.
 - 각 컬럼이 유일한(unique) 이름을 가져야 한다.
@@ -463,18 +508,18 @@ DROP [TEMPORARY] TABLE [IF EXISTS]
 
 ## 제 2 정규화 (Second Normal Form, 2NF)
 - 1NF를 만족해야 한다.
-- 모든 칼럼이 부분적 함수 종속(Partial Functional Dependency)이 없어야 한다. = 모든 칼럼이 완전 함수 종속(Fully Functional Dependency)을 만족해야 한다.
+- 모든 칼럼이 **부분적 함수 종속(Partial Functional Dependency)** 이 없어야 한다. = 모든 칼럼이 **완전 함수 종속(Fully Functional Dependency)** 을 만족해야 한다.
 
 ## 제 3 정규화 (Third Normal Form, 3NF)
 - 2NF를 만족해야 한다.
-- 이행적 함수 종속성(Transitive Functional Dependency)가 존재하지 않아야 한다.
+- **이행적 함수 종속성(Transitive Functional Dependency)** 가 존재하지 않아야 한다.
   - `A → D`, `D → B` 이면 `A → B`를 만족하게 되는 것을 의미한다.
   
 ## Boyce-Codd Normal Form (BCNF)
 - 3NF를 만족해야 한다.
 - 다음 한목 중 적어도 하나를 만족해야 한다.
   - (1) 모든 Functional Dependency는 Trivial 해야 한다.
-  - (2) 모든 Functional Dependency의 Determinant Set은 Superkey여야 한다.
+  - (2) 모든 Functional Dependency의 Determinant Set은  슈퍼키여야 한다.
 
 <hr>
 
@@ -488,8 +533,8 @@ DROP [TEMPORARY] TABLE [IF EXISTS]
 - 하나 이상의 테이블에 중복 데이터를 추가하는 데이터베이스 최적화 기술이다.
 - 이것은 우리가 관계형 데이터베이스에서 비용이 높은 조인을 피하는데 도움이 될 수 있다.
 - denormalization은 'reversing normalization' 또는 'not to normalization'을 의미하지 않는다.
+    > not to normalization: 기본적으로 정규화 된 스키마를 가져 와서 정규화되지 않게 만드는 프로세스를 **비정규화**라고 한다.
 - 역정규화는 정규화 후 적용되는 최적화 기법이다. 
-  - 기본적으로 정규화 된 스키마를 가져 와서 정규화되지 않게 만드는 프로세스를 비정규화라고 한다.
 - 기존의 정규화된 데이터베이스에서는 데이터를 별도의 논리 테이블에 저장하고 중복 데이터를 최소화하려고 시도한다. 정규화는 데이터 수정 면에서 장점이 있지만, 테이블이 크면 조인을 수행하는데 불필요하게 오랜 시간을 소비할 수 있다는 단점이 있다. 
 
 ## 장점과 단점
