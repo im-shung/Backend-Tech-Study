@@ -782,8 +782,14 @@ SELECT *
     ON Orders.CustomerID = Customers.CustomerID;
 ```
 
+MySQL에서 FULL OUTER JOIN 하는법
+```SQL
+(SELECT * FROM employees.employees A LEFT JOIN employees.titles B ON A.emp_no = B.emp_no) UNION (SELECT * FROM employees.employees A LEFT JOIN employees.titles B ON A.emp_no = B.emp_no)
+```
+
 - `FULL OUTER JOIN`은 합집합 연산 결과와 같다.
 - JOIN KEY 칼럼의 값이 테이블 A, B에 모두 공통적으로 존재하는 데이터 + 한쪽 테이블에 존재하는 데이터를 조인한다.
+
 
 <hr>
 
@@ -1200,6 +1206,11 @@ Clustering은 DB 스토리지를 1대만 사용하기 때문에 DB 스토리지 
 - 잘못 사용하는 경우 오히려 검색 성능 저하
 - 특히 UPDATE의 경우 인덱스를 제거하는 것이 아니라, '사용하지 않음'으로 처리하고 남겨두기 때문에 저장 공간이 낭비될 수 있다.
 
+## 인덱스 종류
+1. 클러스터형 인덱스(Clustered Index)
+2. 보조 인덱스(세컨더리 인덱스, 비클러스터형 인덱스, Nonclustered Index)
+
+
 <HR>
 
 출처
@@ -1339,6 +1350,13 @@ Clustering은 DB 스토리지를 1대만 사용하기 때문에 DB 스토리지 
 	- 오라클 같은 DBMS에서는 주로 `READ COMMITTED` 수준을 많이 사용.
 	- MySQL에서는 `REPEATABLE READ` 를 주로 사용.
 
+### InnoDB에서는 왜 PHANTOM READ 문제가 발생하지 않는가?
+ InnoDB 스토리지 엔진은 **레코드 락과 갭 락을 합친 넥스트 키 락**을 사용한다. 
+
+t 테이블에 c1 = 13 , c = 17 인 두 레코드가 있다고 가정하자. 이때 SELECT c1 FROM t WHERE c1 BETWEEN 10 AND 20 FOR UPDATE 쿼리를 수행하면, 10 <= c1 <= 12, 14 <= c1 <= 16, 18 <= c1 <= 20 인 영역은 전부 갭 락에 의해 락이 걸려서 해당 영역에 레코드를 삽입할 수 없다. 또한 c = 13, c = 17인 영역도 레코드 락에 의해 해당 영역에 레코드를 삽입할 수 없다. 참고로 INSERT 외에 UPDATE, DELETE 쿼리도 마찬가지이다.
+
+이러한 방식으로 InnoDB 스토리지 엔진은 PHANTOM READ 문제를 해결한다.
+
 <HR>
 
 # 트랜잭션의 격리 수준
@@ -1416,9 +1434,17 @@ Undo 영역은 하나의 레코드에 대해 백업이 하나 이상 얼마든�
 - 하지만 InnoDB 스토리지 엔진에서는 갭 락과 넥스트 키 덕분에 REPEATABLE READ 격리 수준에서도 이미 PHANTOM READ가 발생하지 않기 때문에 굳이 SERIALIZABLE을 사용할 필요성은 없어 보인다. 
 	> 엄밀하게는 `SELECT ... FOR UPDATE` 나 `SELECT ... FOR SHARE` 쿼리의 경우 REPEATABLE READ 격리 수준에서 PHANTOM READ 현상이 발생할 수 있다. 하지만 레코드 변경 이력(Undo 레코드)에 잠금을 걸 수는 없기 때문에, 이러한 잠금을 동반한 SELECT 쿼리는 예외적인 상황으로 볼 수 있다. 
 
+### `SELECT ... FOR UPDATE`
+- 동시성 제어를 위해 특정 데이터(ROW)에 대해 배타적 락을 건다.
+
+
+### `SELECT ... FOR SHARE` 
+
+
 <HR>
 
 출처
 - Real MySQL 8.0 책
 
 <HR>
+
